@@ -11,21 +11,35 @@ import static org.junit.Assert.*;
 
 public class PileButtonTest 
 {
-	PileButton pile1;
+	PileButton pile1, pile2;
 	
 	@Before
 	public void setup()
 	{
-		ArrayList<Button> listeBoutons = new ArrayList<Button>(Arrays.asList(ROUGE, NOIRE, BLANCHE, ROUGE));
-		pile1 = new PileButton(listeBoutons);
+		ArrayList<Button> listeBoutons1 = new ArrayList<Button>(Arrays.asList(ROUGE, NOIR, BLANC, ROUGE));
+		pile1 = new PileButton(listeBoutons1);
+		
+		ArrayList<Button> listeBoutons2 = new ArrayList<Button>(Arrays.asList(BLANC, NOIR));
+		pile2 = new PileButton(listeBoutons2);
 	}
 	
 	@Test
 	public void addButtonTest()
 	{
-		ArrayList<Button> listeButtonsAttendue = new ArrayList<Button>(Arrays.asList(ROUGE, NOIRE, BLANCHE, ROUGE, BLANCHE));
+		ArrayList<Button> listeButtonsAttendue = new ArrayList<Button>(Arrays.asList(ROUGE, NOIR, BLANC, ROUGE, BLANC));
 		
-		pile1.addButton(BLANCHE);
+		pile1.addButton(BLANC);
+		ArrayList<Button> listeButtonsTrouvee = pile1.getListeButtons();
+		
+		assertEquals(listeButtonsAttendue, listeButtonsTrouvee);
+	}
+	
+	@Test
+	public void addPileButtonTest()
+	{
+		ArrayList<Button> listeButtonsAttendue = new ArrayList<Button>(Arrays.asList(ROUGE, NOIR, BLANC, ROUGE, BLANC, NOIR));
+		
+		pile1.addPileButton(pile2);
 		ArrayList<Button> listeButtonsTrouvee = pile1.getListeButtons();
 		
 		assertEquals(listeButtonsAttendue, listeButtonsTrouvee);
@@ -37,10 +51,10 @@ public class PileButtonTest
 		boolean reponseTrouvee = pile1.sameButton(ROUGE);
 		assertTrue(reponseTrouvee);
 		
-		boolean reponseTrouvee2 = pile1.sameButton(NOIRE);
+		boolean reponseTrouvee2 = pile1.sameButton(NOIR);
 		assertFalse(reponseTrouvee2);
 		
-		boolean reponseTrouvee3 = pile1.sameButton(BLANCHE);
+		boolean reponseTrouvee3 = pile1.sameButton(BLANC);
 		assertFalse(reponseTrouvee3);
 	}
 	
@@ -56,9 +70,19 @@ public class PileButtonTest
 	@Test
 	public void getListeButtonsTest()
 	{
-		ArrayList<Button> listeButtonsAttendue = new ArrayList<Button>(Arrays.asList(ROUGE, NOIRE, BLANCHE, ROUGE));
+		ArrayList<Button> listeButtonsAttendue = new ArrayList<Button>(Arrays.asList(ROUGE, NOIR, BLANC, ROUGE));
 		ArrayList<Button> listeButtonsTrouvee = pile1.getListeButtons();
 		
 		assertEquals(listeButtonsAttendue, listeButtonsTrouvee);
+	}
+	
+	@Test
+	public void toStringTest()
+	{
+		String resultatAttendu = "[ROUGE,BLANC,NOIR,ROUGE]";
+		String resultatTrouve = pile1.toString();
+		
+		assertEquals(resultatAttendu, resultatTrouve);
+		
 	}
 }

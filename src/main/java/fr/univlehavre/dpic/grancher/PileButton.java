@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class PileButton
 {
-	public static enum Button { NOIRE, ROUGE, BLANCHE};
+	public static enum Button { NOIR, ROUGE, BLANC};
 	private ArrayList<Button> listeButtons;
 	
 	public PileButton(Button bouton)
@@ -24,8 +24,12 @@ public class PileButton
 		boolean sameButton = sameButton(bouton);
 		listeButtons.add(bouton);
 		
-		return sameButton;
-		
+		return sameButton;	
+	}
+	
+	public void addPileButton(PileButton listeBoutonsAjoutes)
+	{
+		listeButtons.addAll(listeBoutonsAjoutes.getListeButtons());
 	}
 	
 	public boolean sameButton(Button bouton)
@@ -41,5 +45,26 @@ public class PileButton
 	public ArrayList<Button> getListeButtons()
 	{
 		return listeButtons;
+	}
+	
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		
+		builder.append("[");
+				
+		for(int i=listeButtons.size()-1; i>=0; i--)
+		{
+			builder.append(listeButtons.get(i));
+			
+			if(i>0)
+			{
+				builder.append(",");
+			}
+		}
+		
+		builder.append("]");
+		
+		return builder.toString();
 	}
 }
