@@ -2,7 +2,7 @@ package fr.univlehavre.dpic.grancher;
 
 import java.util.ArrayList;
 
-public class PileButton
+public class PileButton implements Comparable<PileButton>
 {
 	public static enum Button { NOIR, ROUGE, BLANC};
 	private ArrayList<Button> listeButtons;
@@ -39,7 +39,19 @@ public class PileButton
 	
 	public Button getSommet()
 	{
-		return listeButtons.get(listeButtons.size()-1);
+		Button boutonSommet;
+		
+		if(estVide())
+		{
+			boutonSommet=null;
+		}
+		
+		else
+		{
+			boutonSommet=listeButtons.get(listeButtons.size()-1);
+		}
+		
+		return boutonSommet;
 	}
 	
 	public ArrayList<Button> getListeButtons()
@@ -47,6 +59,76 @@ public class PileButton
 		return listeButtons;
 	}
 	
+	public boolean estVide()
+	{
+		return listeButtons.isEmpty();
+	}
+	
+	public Button getButtonDessous()
+	{
+		Button boutonDessous;
+		
+		if(estVide())
+		{
+			boutonDessous=null;
+		}
+		
+		else
+		{
+			boutonDessous=listeButtons.get(0);
+		}
+		
+		return boutonDessous;
+	}
+	
+	public void semer(PileButton pileCourante, boolean plusieursButtonsSemes)
+	{
+		if(plusieursButtonsSemes)
+		{
+			pileCourante.addPileButton(this);	
+			listeButtons.clear();	
+		}
+		
+		else
+		{
+			pileCourante.addButton(this.getButtonDessous());	
+			listeButtons.remove(this.getButtonDessous());
+		}
+	}
+	
+	@Override
+	public int compareTo(PileButton pileButton) 
+	{
+		return pileButton.getSommet().compareTo(this.getSommet());	
+	}
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((listeButtons == null) ? 0 : listeButtons.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PileButton other = (PileButton) obj;
+		if (listeButtons == null) {
+			if (other.listeButtons != null)
+				return false;
+		} else if (!listeButtons.equals(other.listeButtons))
+			return false;
+		return true;
+	}
+
 	public String toString()
 	{
 		StringBuilder builder = new StringBuilder();
