@@ -8,28 +8,25 @@ import fr.univlehavre.dpic.grancher.PileButton.Button;
 public class UsinePiles 
 {
 	private ArrayList<PileButton> listePiles;
-	private static int nbBoutons = 3;
+	private final static int NB_BOUTONS = 3;
 	
 	public UsinePiles()
 	{
 		listePiles = new ArrayList<PileButton>();
 		
-		for(int i=0; i<nbBoutons; i++)
+		for(int i=0; i<NB_BOUTONS; i++)
 		{
 			listePiles.add(new PileButton(Button.BLANC));
 			listePiles.add(new PileButton(Button.ROUGE));
 			listePiles.add(new PileButton(Button.NOIR));		
 		}
+		
+		Collections.shuffle(listePiles);
 	}
 	
 	public UsinePiles(ArrayList<PileButton> listePiles)
 	{
 		this.listePiles =  listePiles;
-	}
-	
-	public void melangerPiles()
-	{
-		Collections.shuffle(listePiles);
 	}
 	
 	public ArrayList<PileButton> getListePiles()

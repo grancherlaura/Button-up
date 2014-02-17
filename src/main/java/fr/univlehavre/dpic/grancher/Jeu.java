@@ -9,15 +9,17 @@ import fr.univlehavre.dpic.grancher.PileButton.Button;
 public class Jeu 
 {
 	private UsinePiles usine;
-	private int tourJoueur = 1;
-	private int nbPointsJoueurRouge=0;
-	private int nbPointsJoueurNoir=0;
+	private int tourJoueur;
+	private int nbPointsJoueurRouge;
+	private int nbPointsJoueurNoir;
 	private Scanner scanner;
 	
 	public Jeu()
 	{
 		usine = new UsinePiles();
-		usine.melangerPiles();
+		tourJoueur=1;
+		nbPointsJoueurNoir=0;
+		nbPointsJoueurRouge=0;
 	}
 	
 	public Jeu(UsinePiles usine)
@@ -98,13 +100,11 @@ public class Jeu
 	{
 		scanner = new Scanner(System.in);
 		
-		int pile;
-		
 		String pileChoisie = scanner.nextLine();
-		pile = convertirEntier(pileChoisie);
+		int pile = convertirEntier(pileChoisie);
 		
-		// tant que le numero de pile n'est pas valide
-		while(usine.pileInvalide(pile) || usine.neContientPasEspion(pile))
+		// tant que la pile ne contient pas un pion blanc
+		while(usine.neContientPasEspion(pile))
 		{
 			System.err.println(messageErreur());
 			pileChoisie = scanner.nextLine();
@@ -230,7 +230,6 @@ public class Jeu
 		
 			compterPoints();
 			usine = new UsinePiles();
-			usine.melangerPiles();
 		}
 		
 		System.out.println(afficherNbPoints());

@@ -93,7 +93,7 @@ public class JeuTest
 	@Test
 	public void afficherNbPointsTest()
 	{
-		String resultatAttendu = "\n==================================\nJoueur rouge : 0, Joueur noir : 0\nNouvelle partie !\n==================================\n";
+		String resultatAttendu = "\n==================================\nJoueur rouge : 0, Joueur noir : 0\n==================================\n";
 		String resultatTrouve = j.afficherNbPoints();
 		
 		assertEquals(resultatAttendu, resultatTrouve);
@@ -109,7 +109,7 @@ public class JeuTest
 
 		j.compterPoints();
 		
-		String resultatAttendu2 = "\n==================================\nJoueur rouge : 0, Joueur noir : 2\nNouvelle partie !\n==================================\n";
+		String resultatAttendu2 = "\n==================================\nJoueur rouge : 0, Joueur noir : 2\n==================================\n";
 		String resultatTrouve2 = j.afficherNbPoints();
 		
 		assertEquals(resultatAttendu2, resultatTrouve2);		
