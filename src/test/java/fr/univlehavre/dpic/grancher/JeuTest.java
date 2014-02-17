@@ -1,13 +1,11 @@
 package fr.univlehavre.dpic.grancher;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import org.junit.*;
 import static org.junit.Assert.*;
 
-import fr.univlehavre.dpic.grancher.PileButton.Button;
 import static fr.univlehavre.dpic.grancher.PileButton.Button.*;
 
 public class JeuTest 

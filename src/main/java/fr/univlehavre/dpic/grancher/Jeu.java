@@ -1,7 +1,6 @@
 package fr.univlehavre.dpic.grancher;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Scanner;
 
 import fr.univlehavre.dpic.grancher.PileButton.Button;
