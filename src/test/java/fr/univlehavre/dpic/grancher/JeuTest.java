@@ -13,152 +13,129 @@ import static fr.univlehavre.dpic.grancher.PileButton.Button.*;
 public class JeuTest 
 {
 	Jeu j;
+	UsinePiles usine;
 	
 	@Before
 	public void setup()
 	{
 		j = new Jeu();
-		Collections.sort(j.getListePile());
+		usine = j.getUsine();
+		Collections.sort(usine.getListePiles());
 	}
 	
 	@Test
-	public void revenirDebutListeTest()
+	public void changerJoueurTest()
 	{
-		boolean resultat = j.revenirDebutListe(8);
-		assertTrue(resultat);
+		int tourJoueurAttendu = 2;
+		j.changerJoueur();
+		int tourJoueurTrouve = j.getTourJoueur();
 		
-		boolean resultat2 = j.revenirDebutListe(7);
-		assertFalse(resultat2);			
+		assertEquals(tourJoueurAttendu, tourJoueurTrouve);
+		
+		int tourJoueurAttendu2 = 1;
+		j.changerJoueur();
+		int tourJoueurTrouve2 = j.getTourJoueur();
+		
+		assertEquals(tourJoueurAttendu2, tourJoueurTrouve2);		
 	}
 	
 	@Test
-	public void revenirPileDepart()
+	public void couleurJoueurTest()
 	{
-		boolean resultat = j.revenirPileDepart(6, 5);
-		assertTrue(resultat);
+		String couleurAttendue = "ROUGE";		
+		String couleurTrouvee = j.couleurJoueur(1);
 		
-		boolean resultat2 = j.revenirPileDepart(4, 7);
-		assertFalse(resultat2);
+		assertEquals(couleurAttendue, couleurTrouvee);
+		
+		String couleurAttendue2 = "NOIR";		
+		String couleurTrouvee2 = j.couleurJoueur(2);
+		
+		assertEquals(couleurAttendue2, couleurTrouvee2);
 	}
 	
 	@Test
-	public void pileSuivanteTest()
+	public void continuerTest()
 	{
-		int pileSuivanteAttendue = 5;
-		int pileSuivanteTrouvee = j.pileSuivante(2,4);
+		PileButton pile = new PileButton(ROUGE);
+		ArrayList<PileButton> listePile = new ArrayList<PileButton>();
+		listePile.add(pile);
 		
-		assertEquals(pileSuivanteAttendue,pileSuivanteTrouvee);
+		UsinePiles usine2 = new UsinePiles(listePile);
+		Jeu j2 = new Jeu(usine2);
 		
-		int pileSuivanteAttendue2 = 0;
-		int pileSuivanteTrouvee2 = j.pileSuivante(3,8);
+		boolean resultat1 = j2.continuer();
+		assertFalse(resultat1);
 		
-		assertEquals(pileSuivanteAttendue2,pileSuivanteTrouvee2);
+		PileButton pile2 = new PileButton(NOIR);
+		listePile.add(pile2);
+		usine2 = new UsinePiles(listePile);
 		
-		int pileSuivanteAttendue3 = 3;
-		int pileSuivanteTrouvee3 = j.pileSuivante(4,3);
-		
-		assertEquals(pileSuivanteAttendue3,pileSuivanteTrouvee3);
+		boolean resultat2 = j2.continuer();
+		assertTrue(resultat2);		
 	}
 	
 	@Test
-	public void getPileTest()
-	{		
-		PileButton pileAttendue = new PileButton(BLANC);
-		PileButton pileTrouvee = j.getPile(1);
-		
-		PileButton pileAttendue2 = new PileButton(ROUGE);
-		PileButton pileTrouvee2 = j.getPile(3);
-		
-		PileButton pileAttendue3 = new PileButton(NOIR);
-		PileButton pileTrouvee3 = j.getPile(8);
-		
-		assertEquals(pileAttendue,pileTrouvee);
-		assertEquals(pileAttendue2,pileTrouvee2);
-		assertEquals(pileAttendue3,pileTrouvee3);
-	}
-	
-	@Test
-	public void poserTest()
+	public void afficherMessageTest()
 	{
-		// Piles au départ
-		ArrayList<Button> listeBoutons = new ArrayList<Button>(Arrays.asList(NOIR));
-		ArrayList<Button> listeBoutons2 = new ArrayList<Button>(Arrays.asList(NOIR, BLANC, ROUGE, ROUGE));
-		ArrayList<Button> listeBoutons3 = new ArrayList<Button>(Arrays.asList(BLANC, NOIR));
-		
-		PileButton pile1 = new PileButton(listeBoutons);
-		PileButton pile2 = new PileButton(listeBoutons2);
-		PileButton pile3 = new PileButton(listeBoutons3);
-			
-		ArrayList<PileButton> listePile = new ArrayList<PileButton>(Arrays.asList(pile1,pile2,pile3));
-		Jeu jeu = new Jeu(listePile);
-		
-		// on seme pile2 sur pile3
-		jeu.poser(1,2);
-		
-		ArrayList<Button> listeAttendue = new ArrayList<Button>(Arrays.asList(NOIR));
-		ArrayList<Button> listeAttendue2 = new ArrayList<Button>(Arrays.asList(BLANC, ROUGE, ROUGE));
-		ArrayList<Button> listeAttendue3 = new ArrayList<Button>(Arrays.asList(BLANC, NOIR, NOIR));
-		
-		ArrayList<Button> listeTrouve = jeu.getPile(0).getListeButtons();
-		ArrayList<Button> listeTrouve2 = jeu.getPile(1).getListeButtons();
-		ArrayList<Button> listeTrouve3 = jeu.getPile(2).getListeButtons();
-		
-		assertEquals(listeAttendue,listeTrouve);
-		assertEquals(listeAttendue2,listeTrouve2);
-		assertEquals(listeAttendue3,listeTrouve3);
-		
-		// on seme pile2 sur pile1 donc tout va sur pile1
-		jeu.poser(1,0);
-		
-		ArrayList<Button> listeAttendue4 = new ArrayList<Button>(Arrays.asList(NOIR, BLANC, ROUGE, ROUGE));
-		ArrayList<Button> listeAttendue5 = new ArrayList<Button>();
-		ArrayList<Button> listeAttendue6 = new ArrayList<Button>(Arrays.asList(BLANC, NOIR, NOIR));
-		
-		ArrayList<Button> listeTrouve4 = jeu.getPile(0).getListeButtons();
-		ArrayList<Button> listeTrouve5 = jeu.getPile(1).getListeButtons();
-		ArrayList<Button> listeTrouve6 = jeu.getPile(2).getListeButtons();
-		
-		assertEquals(listeAttendue4,listeTrouve4);
-		assertEquals(listeAttendue5,listeTrouve5);
-		assertEquals(listeAttendue6,listeTrouve6);
-	}
-	
-	@Test
-	public void poserTouteLaPileTest()
-	{
-		// Piles au départ
-		ArrayList<Button> listeBoutons = new ArrayList<Button>(Arrays.asList(NOIR));
-		ArrayList<Button> listeBoutons2 = new ArrayList<Button>(Arrays.asList(NOIR, BLANC, ROUGE, ROUGE));
-		ArrayList<Button> listeBoutons3 = new ArrayList<Button>(Arrays.asList(BLANC, NOIR));
-		
-		PileButton pile1 = new PileButton(listeBoutons);
-		PileButton pile2 = new PileButton(listeBoutons2);
-		PileButton pile3 = new PileButton(listeBoutons3);
-			
-		ArrayList<PileButton> listePile = new ArrayList<PileButton>(Arrays.asList(pile1,pile2,pile3));
-		Jeu jeu = new Jeu(listePile);
-		
-		// on seme pile2
-		jeu.semerTouteLaPile(1);
-		
-		ArrayList<Button> listeAttendue = new ArrayList<Button>(Arrays.asList(NOIR, BLANC, ROUGE, ROUGE));
-		ArrayList<Button> listeAttendue2 = new ArrayList<Button>(Arrays.asList(BLANC, NOIR, NOIR));
-		
-		ArrayList<Button> listeTrouve = jeu.getPile(0).getListeButtons();
-		ArrayList<Button> listeTrouve2 = jeu.getPile(1).getListeButtons();
-		
-		assertEquals(listeAttendue,listeTrouve);
-		assertEquals(listeAttendue2,listeTrouve2);
-	}
-	
-	@Test
-	public void toStringTest()
-	{
-		String resultatAttendu = "<1[BLANC]/2[BLANC]/3[BLANC]/4[ROUGE]/5[ROUGE]/6[ROUGE]/7[NOIR]/8[NOIR]/9[NOIR]>";
-		
-		Collections.sort(j.getListePile());
-		String resultatTrouve = j.toString();
+		String resultatAttendu = "<1[BLANC]/2[BLANC]/3[BLANC]/4[ROUGE]/5[ROUGE]/6[ROUGE]/7[NOIR]/8[NOIR]/9[NOIR]>\nJoueur ROUGE\nPile choisie : ";
+		String resultatTrouve = j.afficherMessage();
 		
 		assertEquals(resultatAttendu, resultatTrouve);
+		
+		j.changerJoueur();
+		
+		String resultatAttendu2 = "<1[BLANC]/2[BLANC]/3[BLANC]/4[ROUGE]/5[ROUGE]/6[ROUGE]/7[NOIR]/8[NOIR]/9[NOIR]>\nJoueur NOIR\nPile choisie : ";
+		String resultatTrouve2 = j.afficherMessage();
+		
+		assertEquals(resultatAttendu2, resultatTrouve2);
+	}
+	
+	@Test
+	public void afficherNbPointsTest()
+	{
+		String resultatAttendu = "\n==================================\nJoueur rouge : 0, Joueur noir : 0\nNouvelle partie !\n==================================\n";
+		String resultatTrouve = j.afficherNbPoints();
+		
+		assertEquals(resultatAttendu, resultatTrouve);
+		
+		usine.semerTouteLaPile(0);
+		usine.semerTouteLaPile(0);
+		usine.semerTouteLaPile(0);
+		usine.semerTouteLaPile(0);
+		usine.semerTouteLaPile(0);
+		usine.semerTouteLaPile(0);
+		usine.semerTouteLaPile(0);
+		usine.semerTouteLaPile(0);
+
+		j.compterPoints();
+		
+		String resultatAttendu2 = "\n==================================\nJoueur rouge : 0, Joueur noir : 2\nNouvelle partie !\n==================================\n";
+		String resultatTrouve2 = j.afficherNbPoints();
+		
+		assertEquals(resultatAttendu2, resultatTrouve2);		
+	}
+
+	@Test
+	public void compterPointsTest()
+	{		
+		usine.semerTouteLaPile(0);
+		usine.semerTouteLaPile(0);
+		usine.semerTouteLaPile(0);
+		usine.semerTouteLaPile(0);
+		usine.semerTouteLaPile(0);
+		usine.semerTouteLaPile(0);
+		usine.semerTouteLaPile(0);
+		usine.semerTouteLaPile(0);
+
+		j.compterPoints();
+		
+		int nbPointsJoueurNoirAttendu = 2;
+		int nbPointsJoueurRougeAttendu = 0;
+		
+		int nbPointsJoueurNoirTrouve = j.getNbPointsJoueurNoir();
+		int nbPointsJoueurRougeTrouve = j.getNbPointsJoueurRouge();
+		
+		assertEquals(nbPointsJoueurNoirAttendu, nbPointsJoueurNoirTrouve);
+		assertEquals(nbPointsJoueurRougeAttendu, nbPointsJoueurRougeTrouve);
 	}
 }

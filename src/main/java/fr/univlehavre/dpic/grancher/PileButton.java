@@ -81,8 +81,9 @@ public class PileButton implements Comparable<PileButton>
 		return boutonDessous;
 	}
 	
-	public void semer(PileButton pileCourante, boolean plusieursButtonsSemes)
+	public boolean semer(PileButton pileCourante, boolean plusieursButtonsSemes)
 	{
+		boolean sameButton=false;
 		if(plusieursButtonsSemes)
 		{
 			pileCourante.addPileButton(this);	
@@ -91,9 +92,11 @@ public class PileButton implements Comparable<PileButton>
 		
 		else
 		{
-			pileCourante.addButton(this.getButtonDessous());	
+			sameButton=pileCourante.addButton(this.getButtonDessous());	
 			listeButtons.remove(this.getButtonDessous());
 		}
+		
+		return sameButton;
 	}
 	
 	@Override
@@ -102,6 +105,10 @@ public class PileButton implements Comparable<PileButton>
 		return pileButton.getSommet().compareTo(this.getSommet());	
 	}
 	
+	public boolean contientEspion()
+	{
+		return listeButtons.contains(Button.BLANC);
+	}
 
 	@Override
 	public int hashCode() {
@@ -135,11 +142,11 @@ public class PileButton implements Comparable<PileButton>
 		
 		builder.append("[");
 				
-		for(int i=listeButtons.size()-1; i>=0; i--)
+		for(int i=0; i<listeButtons.size(); i++)
 		{
 			builder.append(listeButtons.get(i));
 			
-			if(i>0)
+			if(i<listeButtons.size()-1)
 			{
 				builder.append(",");
 			}

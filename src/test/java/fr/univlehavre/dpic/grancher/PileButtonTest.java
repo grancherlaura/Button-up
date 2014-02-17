@@ -133,7 +133,7 @@ public class PileButtonTest
 	@Test
 	public void toStringTest()
 	{
-		String resultatAttendu = "[ROUGE,BLANC,NOIR,ROUGE]";
+		String resultatAttendu = "[ROUGE,NOIR,BLANC,ROUGE]";
 		String resultatTrouve = pile1.toString();
 		
 		assertEquals(resultatAttendu, resultatTrouve);

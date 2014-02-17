@@ -2,119 +2,244 @@ package fr.univlehavre.dpic.grancher;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Scanner;
 
 import fr.univlehavre.dpic.grancher.PileButton.Button;
 
 public class Jeu 
 {
-	private ArrayList<PileButton> listePile;
-	private static int nbBoutons = 3;
+	private UsinePiles usine;
+	private int tourJoueur = 1;
+	private int nbPointsJoueurRouge=0;
+	private int nbPointsJoueurNoir=0;
+	private Scanner scanner;
 	
 	public Jeu()
 	{
-		listePile =  new ArrayList<PileButton>();
-		
-		for(int i=0; i<nbBoutons; i++)
-		{
-			listePile.add(new PileButton(Button.ROUGE));
-			listePile.add(new PileButton(Button.NOIR));
-			listePile.add(new PileButton(Button.BLANC));		
-		}
+		usine = new UsinePiles();
+		usine.melangerPiles();
+	}
+	
+	public Jeu(UsinePiles usine)
+	{
+		this.usine = usine;
+	}
 
-		Collections.shuffle(listePile);
+	public void changerJoueur() 
+	{
+		tourJoueur = 3 - tourJoueur;
 	}
 	
-	public Jeu(ArrayList<PileButton> listePile)
+	public String couleurJoueur(int joueur)
 	{
-		this.listePile =  listePile;
-	}
-	
-	public ArrayList<PileButton> getListePile()
-	{
-		return listePile;
-	}
-	
-	public boolean revenirDebutListe(int indicePileCourante)
-	{
-		return indicePileCourante==listePile.size()-1;
-	}
-	
-	public boolean revenirPileDepart(int indicePileDepart, int indicePileCourante)
-	{
-		return indicePileDepart==(indicePileCourante+1);
-	}
-	
-	public int pileSuivante(int pileDepart, int pileCourante)
-	{
-		int pileSuivante=pileCourante;
+		String couleur;
 		
-		if(revenirDebutListe(pileCourante))
-		{	
-			pileSuivante = 0;
+		if(joueur==1)
+		{
+			couleur="ROUGE";
 		}
-			
+		
 		else
 		{
-			if(!revenirPileDepart(pileDepart, pileCourante))
-			{
-				pileSuivante++;
-			}
+			couleur="NOIR";
 		}
 		
-		return pileSuivante;
+		return couleur;
 	}
 	
-	public PileButton getPile(int indicePile)
+	public boolean continuer()
 	{
-		return listePile.get(indicePile);
+		return usine.tailleListe()!=1;
 	}
 	
-	public void poser(int indicePileDepart, int indicePileCourante)
-	{		
-		PileButton pileCourante = getPile(indicePileCourante);
-		PileButton pileDepart = getPile(indicePileDepart);
-
-		boolean plusieursButtonsSemes = revenirPileDepart(indicePileDepart,indicePileCourante);
-		pileDepart.semer(pileCourante, plusieursButtonsSemes);
-	}
-	
-	public void semerTouteLaPile(int indicePileChoisie)
-	{
-		int indicePileCourante=indicePileChoisie;
-		PileButton pileChoisie = getPile(indicePileChoisie);
-		
-		while(!pileChoisie.estVide())
-		{
-			indicePileCourante = pileSuivante(indicePileChoisie,indicePileCourante);
-			poser(indicePileChoisie,indicePileCourante);			
-		}
-		
-		listePile.remove(pileChoisie);
-	}
-	
-	public String toString()
+	public String afficherMessage()
 	{
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("<");
 		
-		for(int i=0; i<listePile.size(); i++)
+		buffer.append(usine);
+		buffer.append("\nJoueur ");
+		buffer.append(couleurJoueur(tourJoueur));
+		buffer.append("\nPile choisie : ");
+		
+		return buffer.toString();
+	}
+	
+	public String afficherNbPoints()
+	{
+		StringBuffer buffer = new StringBuffer();
+		
+		buffer.append("\n==================================\nJoueur rouge : ");
+		buffer.append(nbPointsJoueurRouge);
+		buffer.append(", Joueur noir : ");
+		buffer.append(nbPointsJoueurNoir);
+		buffer.append("\n==================================\n");
+		
+		return buffer.toString();
+	}
+	
+	public int convertirEntier(String pileChoisie)
+	{
+		int pile;
+		
+		try 
 		{
-			buffer.append(i+1);
-			buffer.append(listePile.get(i));
+			pile=Integer.parseInt(pileChoisie)-1;
+		} 
+		
+		catch (NumberFormatException e) 
+		{
+			pile=-1;	
+		}
+		
+		return pile;
+	}
+	
+	public int demanderPile()
+	{
+		scanner = new Scanner(System.in);
+		
+		int pile;
+		
+		String pileChoisie = scanner.nextLine();
+		pile = convertirEntier(pileChoisie);
+		
+		// tant que le numero de pile n'est pas valide
+		while(usine.pileInvalide(pile) || usine.neContientPasEspion(pile))
+		{
+			System.err.println(messageErreur());
+			pileChoisie = scanner.nextLine();
+			pile = convertirEntier(pileChoisie);
+		}
+		
+		return pile;
+	}
+	
+	public void compterPoints()
+	{
+		PileButton pileRestante = usine.getPile(0);
+		ArrayList<Button> listeButtons = pileRestante.getListeButtons();
+		int boutonsRouges = 0;
+		int boutonsNoirs = 0;
+		
+		for(int i=0; i<listeButtons.size(); i++)
+		{
+			Button boutonCourant = listeButtons.get(i);
 			
-			if(i!=listePile.size()-1)
+			if(boutonCourant.equals(Button.ROUGE))
 			{
-				buffer.append("/");
+				boutonsRouges+=(i+1);
+			}
+			
+			else if(boutonCourant.equals(Button.NOIR))
+			{
+				boutonsNoirs+=(i+1);
 			}
 		}
 		
-		buffer.append(">");
+		if(boutonsRouges>boutonsNoirs)
+		{
+			nbPointsJoueurRouge+=boutonsRouges-boutonsNoirs;
+		}
+		
+		else
+		{
+			nbPointsJoueurNoir+=boutonsNoirs-boutonsRouges;
+		}
+	}
+
+	public boolean existeGagnant()
+	{
+		boolean joueurRougeGagnant = nbPointsJoueurRouge > 14;
+		boolean joueurNoirGagnant = nbPointsJoueurNoir > 14;
+		
+		return joueurRougeGagnant || joueurNoirGagnant;
+	}
+	
+	public int getTourJoueur()
+	{
+		return tourJoueur;
+	}
+	
+	public int getNbPointsJoueurRouge()
+	{
+		return nbPointsJoueurRouge;
+	}
+	
+	public int getNbPointsJoueurNoir()
+	{
+		return nbPointsJoueurNoir;
+	}
+	
+	public UsinePiles getUsine()
+	{
+		return usine;
+	}
+	
+	public String messageGagnant()
+	{
+		StringBuffer buffer = new StringBuffer();
+		
+		buffer.append("\nJoueur gagnant : ");
+		
+		if(nbPointsJoueurRouge>nbPointsJoueurNoir)
+		{
+			buffer.append("ROUGE");
+		}
+		
+		else
+		{
+			buffer.append("NOIR");
+		}
+		
 		return buffer.toString();
+	}
+	
+	public String messageErreur()
+	{
+		StringBuffer buffer = new StringBuffer();
+		
+		buffer.append("\nVeuillez entre un nombre entre 1 et ");
+		buffer.append(usine.tailleListe());
+		buffer.append(" d'une pile qui contient un blanc : ");
+		
+		return buffer.toString();
+	}
+	
+	public void jouer()
+	{
+		// tant qu'un joueur n'a pas atteint les 15 points
+		while(!existeGagnant())
+		{
+			System.out.println(afficherNbPoints());
+			System.out.println("\nNouvelle partie !\n");
+			
+			// tant que la partie n'est pas terminee
+			while(continuer())
+			{
+				System.out.println(afficherMessage());
+				
+				int pile=demanderPile();
+				
+				boolean sameButton = usine.semerTouteLaPile(pile);
+				
+				if(!sameButton)
+				{
+					changerJoueur();
+				}
+			}
+		
+			compterPoints();
+			usine = new UsinePiles();
+			usine.melangerPiles();
+		}
+		
+		System.out.println(afficherNbPoints());
+		System.out.println(messageGagnant());
 	}
 	
 	public static void main(String args[])
 	{
 		Jeu j = new Jeu();
-		System.out.println(j);
+		j.jouer();
 	}
 }
