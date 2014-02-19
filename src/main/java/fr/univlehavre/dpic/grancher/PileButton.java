@@ -39,19 +39,7 @@ public class PileButton implements Comparable<PileButton>
 	
 	public Button getSommet()
 	{
-		Button boutonSommet;
-		
-		if(estVide())
-		{
-			boutonSommet=null;
-		}
-		
-		else
-		{
-			boutonSommet=listeButtons.get(listeButtons.size()-1);
-		}
-		
-		return boutonSommet;
+		return listeButtons.get(listeButtons.size()-1);
 	}
 	
 	public ArrayList<Button> getListeButtons()
@@ -65,31 +53,23 @@ public class PileButton implements Comparable<PileButton>
 	}
 	
 	public Button getButtonDessous()
-	{
-		Button boutonDessous;
-		
-		if(estVide())
-		{
-			boutonDessous=null;
-		}
-		
-		else
-		{
-			boutonDessous=listeButtons.get(0);
-		}
-		
-		return boutonDessous;
+	{		
+		return listeButtons.get(0);
 	}
 	
+	// seme la pile sur la pileCourante
 	public boolean semer(PileButton pileCourante, boolean plusieursButtonsSemes)
 	{
 		boolean sameButton=false;
+		
+		//si on doit semer tous les boutons de la pile
 		if(plusieursButtonsSemes)
 		{
 			pileCourante.addPileButton(this);	
 			listeButtons.clear();	
 		}
 		
+		//si on doit semer seulement un bouton
 		else
 		{
 			sameButton=pileCourante.addButton(this.getButtonDessous());	
@@ -111,7 +91,8 @@ public class PileButton implements Comparable<PileButton>
 	}
 
 	@Override
-	public int hashCode() {
+	public int hashCode() 
+	{
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
@@ -120,22 +101,32 @@ public class PileButton implements Comparable<PileButton>
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(Object obj) 
+	{
 		if (this == obj)
 			return true;
+		
 		if (obj == null)
 			return false;
+		
 		if (getClass() != obj.getClass())
 			return false;
+		
 		PileButton other = (PileButton) obj;
-		if (listeButtons == null) {
+		
+		if (listeButtons == null) 
+		{
 			if (other.listeButtons != null)
 				return false;
-		} else if (!listeButtons.equals(other.listeButtons))
+		} 
+		
+		else if (!listeButtons.equals(other.listeButtons))
 			return false;
+		
 		return true;
 	}
 
+	// retourne la liste de buttons sous la forme [BLANC,ROUGE,NOIR,ROUGE]
 	public String toString()
 	{
 		StringBuilder builder = new StringBuilder();

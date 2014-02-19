@@ -33,28 +33,26 @@ public class Jeu
 		tourJoueur = 3 - tourJoueur;
 	}
 	
+	// joueur1 = rouge, joueur2 = noir
 	public String couleurJoueur(int joueur)
 	{
-		String couleur;
+		String couleur="NOIR";
 		
 		if(joueur==1)
 		{
 			couleur="ROUGE";
 		}
 		
-		else
-		{
-			couleur="NOIR";
-		}
-		
 		return couleur;
 	}
 	
+	// verifie si la manche est terminee
 	public boolean continuer()
 	{
 		return usine.tailleListe()!=1;
 	}
 	
+	// demande à l'utilisateur de saisir une pile
 	public String afficherMessage()
 	{
 		StringBuffer buffer = new StringBuffer();
@@ -80,13 +78,14 @@ public class Jeu
 		return buffer.toString();
 	}
 	
-	public int convertirEntier(String pileChoisie)
+	// convertit le string en int, retourne -1 si ce n'est pas possible
+	public int convertirEntier(String chainePileChoisie)
 	{
 		int pile;
 		
 		try 
 		{
-			pile=Integer.parseInt(pileChoisie)-1;
+			pile=Integer.parseInt(chainePileChoisie)-1;
 		} 
 		
 		catch (NumberFormatException e) 
@@ -97,22 +96,23 @@ public class Jeu
 		return pile;
 	}
 	
+	// retourne le numéro de pile choisi par le joueur
 	public int demanderPile()
 	{
 		scanner = new Scanner(System.in);
 		
-		String pileChoisie = scanner.nextLine();
-		int pile = convertirEntier(pileChoisie);
+		String chainePileChoisie = scanner.nextLine();
+		int indicePile = convertirEntier(chainePileChoisie);
 		
 		// tant que la pile ne contient pas un pion blanc
-		while(usine.neContientPasEspion(pile))
+		while(usine.neContientPasEspion(indicePile))
 		{
 			System.err.println(messageErreur());
-			pileChoisie = scanner.nextLine();
-			pile = convertirEntier(pileChoisie);
+			chainePileChoisie = scanner.nextLine();
+			indicePile = convertirEntier(chainePileChoisie);
 		}
 		
-		return pile;
+		return indicePile;
 	}
 	
 	public void compterPoints()
@@ -122,6 +122,7 @@ public class Jeu
 		int boutonsRouges = 0;
 		int boutonsNoirs = 0;
 		
+		// on additionne les valeurs des buttons selon leur place dans la pile
 		for(int i=0; i<listeButtons.size(); i++)
 		{
 			Button boutonCourant = listeButtons.get(i);
@@ -137,6 +138,7 @@ public class Jeu
 			}
 		}
 		
+		// points du joueur gagnant = valeur de ses boutons - valeur des boutons de l'adversaire
 		if(boutonsRouges>boutonsNoirs)
 		{
 			nbPointsJoueurRouge+=boutonsRouges-boutonsNoirs;
@@ -148,6 +150,7 @@ public class Jeu
 		}
 	}
 
+	// retourne vrai si un joueur a depasse les 15 points
 	public boolean existeGagnant()
 	{
 		boolean joueurRougeGagnant = nbPointsJoueurRouge > 14;
@@ -176,6 +179,7 @@ public class Jeu
 		return usine;
 	}
 	
+	// affichage de la couleur du joueur gagnant
 	public String messageGagnant()
 	{
 		StringBuffer buffer = new StringBuffer();
@@ -195,6 +199,7 @@ public class Jeu
 		return buffer.toString();
 	}
 	
+	// explique au joueur les caracteristiques d'une pile valide et lui repropose de rentrer une nouvelle pile
 	public String messageErreur()
 	{
 		StringBuffer buffer = new StringBuffer();
@@ -206,6 +211,7 @@ public class Jeu
 		return buffer.toString();
 	}
 	
+	// on fait jouer les 2 joueurs jusqu'a avoir un gagnant
 	public void jouer()
 	{
 		// tant qu'un joueur n'a pas atteint les 15 points
@@ -214,7 +220,7 @@ public class Jeu
 			System.out.println(afficherNbPoints());
 			System.out.println("\nNouvelle partie !\n");
 			
-			// tant que la partie n'est pas terminee
+			// tant que la manche n'est pas terminee
 			while(continuer())
 			{
 				System.out.println(afficherMessage());
@@ -230,6 +236,7 @@ public class Jeu
 			}
 		
 			compterPoints();
+			// on recommence une nouvelle manche
 			usine = new UsinePiles();
 		}
 		
