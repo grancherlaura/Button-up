@@ -24,13 +24,40 @@ public class UsinePilesTest
 	}
 	
 	@Test
+	public void getListePilesTest()
+	{
+		ArrayList<PileButton> listeAttendue = new ArrayList<PileButton>(Arrays.asList(new PileButton(ROUGE), new PileButton(NOIR), new PileButton(BLANC)));
+		
+		UsinePiles up = new UsinePiles(listeAttendue);
+		ArrayList<PileButton> listeTrouvee = up.getListePiles();
+		
+		assertEquals(listeAttendue, listeTrouvee);
+	}
+	
+	@Test
+	public void tailleListeTest()
+	{
+		int resultatAttendu = 9;
+		int resultatTrouve = usine.tailleListe();
+		
+		ArrayList<PileButton> liste = new ArrayList<PileButton>(Arrays.asList(new PileButton(ROUGE), new PileButton(NOIR), new PileButton(BLANC)));
+		UsinePiles up = new UsinePiles(liste);
+		
+		int resultatAttendu2 = 3;
+		int resultatTrouve2 = up.tailleListe();
+		
+		assertEquals(resultatAttendu, resultatTrouve);
+		assertEquals(resultatAttendu2, resultatTrouve2);
+	}
+	
+	@Test
 	public void estFinListeTest()
 	{
-		boolean resultat = usine.estFinListe(8);
-		assertTrue(resultat);
-		
+		boolean resultat1 = usine.estFinListe(8);
 		boolean resultat2 = usine.estFinListe(7);
-		assertFalse(resultat2);			
+		
+		assertTrue(resultat1);
+		assertFalse(resultat2);
 	}
 	
 	@Test
@@ -41,6 +68,45 @@ public class UsinePilesTest
 		
 		boolean resultat2 = usine.estRevenuDepart(4, 7);
 		assertFalse(resultat2);
+	}
+	
+	@Test
+	public void neContientPasEspionTest()
+	{
+		boolean resultat1 = usine.neContientPasEspion(5);
+		boolean resultat2 = usine.neContientPasEspion(1);
+		
+		assertTrue(resultat1);
+		assertFalse(resultat2);
+	}
+	
+	@Test
+	public void getPileTest()
+	{		
+		PileButton pileAttendue = new PileButton(BLANC);
+		PileButton pileTrouvee = usine.getPile(1);
+		
+		PileButton pileAttendue2 = new PileButton(ROUGE);
+		PileButton pileTrouvee2 = usine.getPile(3);
+		
+		PileButton pileAttendue3 = new PileButton(NOIR);
+		PileButton pileTrouvee3 = usine.getPile(8);
+		
+		assertEquals(pileAttendue,pileTrouvee);
+		assertEquals(pileAttendue2,pileTrouvee2);
+		assertEquals(pileAttendue3,pileTrouvee3);
+	}
+	
+	@Test
+	public void pileInvalideTest()
+	{
+		boolean resultat1 = usine.pileInvalide(-2);
+		boolean resultat2 = usine.pileInvalide(9);
+		boolean resultat3 = usine.pileInvalide(3);
+		
+		assertTrue(resultat1);
+		assertTrue(resultat2);
+		assertFalse(resultat3);
 	}
 	
 	@Test
@@ -65,23 +131,6 @@ public class UsinePilesTest
 		int pileSuivanteTrouvee4 = usine.pileSuivante(0,8);
 		
 		assertEquals(pileSuivanteAttendue4,pileSuivanteTrouvee4);
-	}
-	
-	@Test
-	public void getPileTest()
-	{		
-		PileButton pileAttendue = new PileButton(BLANC);
-		PileButton pileTrouvee = usine.getPile(1);
-		
-		PileButton pileAttendue2 = new PileButton(ROUGE);
-		PileButton pileTrouvee2 = usine.getPile(3);
-		
-		PileButton pileAttendue3 = new PileButton(NOIR);
-		PileButton pileTrouvee3 = usine.getPile(8);
-		
-		assertEquals(pileAttendue,pileTrouvee);
-		assertEquals(pileAttendue2,pileTrouvee2);
-		assertEquals(pileAttendue3,pileTrouvee3);
 	}
 	
 	@Test
@@ -156,5 +205,14 @@ public class UsinePilesTest
 		
 		assertEquals(listeAttendue,listeTrouve);
 		assertEquals(listeAttendue2,listeTrouve2);
+	}
+	
+	@Test
+	public void toStringTest()
+	{
+		String chaineAttendue = "<1[BLANC]/2[BLANC]/3[BLANC]/4[ROUGE]/5[ROUGE]/6[ROUGE]/7[NOIR]/8[NOIR]/9[NOIR]>";
+		String chaineTrouvee = usine.toString();
+		
+		assertEquals(chaineAttendue,chaineTrouvee);
 	}
 }

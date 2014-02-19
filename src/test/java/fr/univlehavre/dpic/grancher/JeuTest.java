@@ -59,7 +59,7 @@ public class JeuTest
 		listePile.add(pile);
 		
 		UsinePiles usine2 = new UsinePiles(listePile);
-		Jeu j2 = new Jeu(usine2);
+		Jeu j2 = new Jeu(usine2,0,0);
 		
 		boolean resultat1 = j2.continuer();
 		assertFalse(resultat1);
@@ -96,14 +96,10 @@ public class JeuTest
 		
 		assertEquals(resultatAttendu, resultatTrouve);
 		
-		usine.semerTouteLaPile(0);
-		usine.semerTouteLaPile(0);
-		usine.semerTouteLaPile(0);
-		usine.semerTouteLaPile(0);
-		usine.semerTouteLaPile(0);
-		usine.semerTouteLaPile(0);
-		usine.semerTouteLaPile(0);
-		usine.semerTouteLaPile(0);
+		for(int i=0; i<8; i++)
+		{
+			usine.semerTouteLaPile(0);
+		}
 
 		j.compterPoints();
 		
@@ -112,19 +108,32 @@ public class JeuTest
 		
 		assertEquals(resultatAttendu2, resultatTrouve2);		
 	}
+	
+	@Test
+	public void convertirEntierTest()
+	{
+		int resultatAttendu1 = 2;
+		int resultatTrouve1 = j.convertirEntier("3");
+		
+		int resultatAttendu2 = -1;
+		int resultatTrouve2 = j.convertirEntier("0");
+		
+		int resultatAttendu3 = -1;
+		int resultatTrouve3 = j.convertirEntier("azerty");
+		
+		assertEquals(resultatAttendu1, resultatTrouve1);
+		assertEquals(resultatAttendu2, resultatTrouve2);
+		assertEquals(resultatAttendu3, resultatTrouve3);
+	}
 
 	@Test
 	public void compterPointsTest()
 	{		
-		usine.semerTouteLaPile(0);
-		usine.semerTouteLaPile(0);
-		usine.semerTouteLaPile(0);
-		usine.semerTouteLaPile(0);
-		usine.semerTouteLaPile(0);
-		usine.semerTouteLaPile(0);
-		usine.semerTouteLaPile(0);
-		usine.semerTouteLaPile(0);
-
+		for(int i=0; i<8; i++)
+		{
+			usine.semerTouteLaPile(0);
+		}
+		
 		j.compterPoints();
 		
 		int nbPointsJoueurNoirAttendu = 2;
@@ -135,5 +144,95 @@ public class JeuTest
 		
 		assertEquals(nbPointsJoueurNoirAttendu, nbPointsJoueurNoirTrouve);
 		assertEquals(nbPointsJoueurRougeAttendu, nbPointsJoueurRougeTrouve);
+	}
+	
+	@Test
+	public void existeGagnantTest()
+	{
+		Jeu jeu = new Jeu(new UsinePiles(),5,16);
+		Jeu jeu2 = new Jeu(new UsinePiles(),5,14);
+		
+		boolean resultat1 = jeu.existeGagnant();
+		boolean resultat2 = jeu2.existeGagnant();
+		
+		assertTrue(resultat1);
+		assertFalse(resultat2);
+	}
+	
+	@Test
+	public void getTourTest()
+	{
+		int resultatAttendu = 1;
+		int resultatTrouve = j.getTourJoueur();
+		
+		j.changerJoueur();
+		int resultatAttendu2 = 2;
+		int resultatTrouve2 = j.getTourJoueur();
+		
+		assertEquals(resultatAttendu, resultatTrouve);
+		assertEquals(resultatAttendu2, resultatTrouve2);
+	}
+	
+
+	@Test
+	public void getNbPointsJoueurRougeTest()
+	{
+		Jeu jeu = new Jeu(new UsinePiles(), 5, 8);
+		
+		int resultatAttendu = 5;
+		int resultatTrouve = jeu.getNbPointsJoueurRouge();
+		assertEquals(resultatAttendu, resultatTrouve);
+	}
+	
+	@Test
+	public void getNbPointsJoueurNoirTest()
+	{
+		Jeu jeu = new Jeu(new UsinePiles(), 5, 8);
+		
+		int resultatAttendu = 8;
+		int resultatTrouve = jeu.getNbPointsJoueurNoir();
+		assertEquals(resultatAttendu, resultatTrouve);
+		
+	}
+	
+	@Test
+	public void getUsineTest()
+	{
+		UsinePiles usAttendue = new UsinePiles();
+		Jeu jeu = new Jeu(usAttendue, 5, 8);
+		
+		UsinePiles usTrouvee = jeu.getUsine();
+		
+		assertEquals(usAttendue, usTrouvee);	
+	}
+	
+	@Test
+	public void messageGagnantTest()
+	{
+		for(int j=0; j<8; j++)
+		{
+			for(int i=0; i<8; i++)
+			{
+				usine.semerTouteLaPile(0);
+			}
+			
+			usine = new UsinePiles();
+		}
+		
+		String messageAttendu = "\nJoueur gagnant : NOIR";
+		String messageTrouve = j.messageGagnant();
+		
+		assertEquals(messageAttendu, messageTrouve);
+	}
+	
+	@Test
+	public void messageErreurTest()
+	{
+		String messageAttendu = "\nVeuillez entrer un nombre entre 1 et 8 d'une pile qui contient un blanc : ";
+		
+		usine.semerTouteLaPile(0);
+		String messageTrouve = j.messageErreur();
+		
+		assertEquals(messageAttendu, messageTrouve);
 	}
 }

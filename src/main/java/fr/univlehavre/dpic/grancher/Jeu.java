@@ -21,9 +21,11 @@ public class Jeu
 		nbPointsJoueurRouge=0;
 	}
 	
-	public Jeu(UsinePiles usine)
+	public Jeu(UsinePiles usine, int nbPointsJoueurRouge, int nbPointsJoueurNoir)
 	{
 		this.usine = usine;
+		this.nbPointsJoueurNoir=nbPointsJoueurNoir;
+		this.nbPointsJoueurRouge=nbPointsJoueurRouge;
 	}
 
 	public void changerJoueur() 
@@ -197,7 +199,7 @@ public class Jeu
 	{
 		StringBuffer buffer = new StringBuffer();
 		
-		buffer.append("\nVeuillez entre un nombre entre 1 et ");
+		buffer.append("\nVeuillez entrer un nombre entre 1 et ");
 		buffer.append(usine.tailleListe());
 		buffer.append(" d'une pile qui contient un blanc : ");
 		

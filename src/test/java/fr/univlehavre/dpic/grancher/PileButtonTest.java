@@ -129,6 +129,18 @@ public class PileButtonTest
 		assertEquals(listePile2Attendue2,listePile2Trouvee2);
 	}
 	
+	@Test
+	public void contientEspionTest()
+	{
+		boolean resultat1 = pile1.contientEspion();
+		assertTrue(resultat1);
+		
+		PileButton pile3 = new PileButton(ROUGE);
+		pile3.addButton(NOIR);
+		
+		boolean resultat2 = pile3.contientEspion();
+		assertFalse(resultat2);
+	}
 	
 	@Test
 	public void toStringTest()
