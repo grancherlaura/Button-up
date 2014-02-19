@@ -52,7 +52,7 @@ public class JeuTest
 	}
 	
 	@Test
-	public void continuerTest()
+	public void continuerMancheTest()
 	{
 		PileButton pile = new PileButton(ROUGE);
 		ArrayList<PileButton> listePile = new ArrayList<PileButton>();
@@ -61,14 +61,14 @@ public class JeuTest
 		UsinePiles usine2 = new UsinePiles(listePile);
 		Jeu j2 = new Jeu(usine2,0,0);
 		
-		boolean resultat1 = j2.continuer();
+		boolean resultat1 = j2.continuerManche();
 		assertFalse(resultat1);
 		
 		PileButton pile2 = new PileButton(NOIR);
 		listePile.add(pile2);
 		usine2 = new UsinePiles(listePile);
 		
-		boolean resultat2 = j2.continuer();
+		boolean resultat2 = j2.continuerManche();
 		assertTrue(resultat2);		
 	}
 	

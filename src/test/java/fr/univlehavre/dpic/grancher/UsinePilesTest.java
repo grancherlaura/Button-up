@@ -84,7 +84,7 @@ public class UsinePilesTest
 	public void getPileTest()
 	{		
 		PileButton pileAttendue = new PileButton(BLANC);
-		PileButton pileTrouvee = usine.getPile(1);
+		PileButton pileTrouvee = usine.getPile(0);
 		
 		PileButton pileAttendue2 = new PileButton(ROUGE);
 		PileButton pileTrouvee2 = usine.getPile(3);
@@ -131,6 +131,27 @@ public class UsinePilesTest
 		int pileSuivanteTrouvee4 = usine.pileSuivante(0,8);
 		
 		assertEquals(pileSuivanteAttendue4,pileSuivanteTrouvee4);
+	}
+	
+	@Test
+	public void joueurRejoueTest()
+	{
+		ArrayList<Button> listeBoutons = new ArrayList<Button>(Arrays.asList(NOIR, BLANC));
+		ArrayList<Button> listeBoutons2 = new ArrayList<Button>(Arrays.asList(NOIR, BLANC, ROUGE, ROUGE));
+		
+		PileButton pile1 = new PileButton(listeBoutons);
+		PileButton pile2 = new PileButton(listeBoutons2);
+		
+		ArrayList<PileButton> liste = new ArrayList<PileButton>(Arrays.asList(pile1, pile2));
+		UsinePiles us = new UsinePiles(liste);
+		
+		boolean resultat1 = us.joueurRejoue(1, false);
+		boolean resultat2 = us.joueurRejoue(0, false);
+		boolean resultat3 = us.joueurRejoue(0, true);
+		
+		assertTrue(resultat1);
+		assertFalse(resultat2);
+		assertFalse(resultat3);
 	}
 	
 	@Test

@@ -46,15 +46,18 @@ public class PileButtonTest
 	}
 	
 	@Test
-	public void sameButtonTest()
+	public void deuxMemesButtonsTest()
 	{
-		boolean reponseTrouvee = pile1.sameButton(ROUGE);
+		pile1.addButton(ROUGE);
+		boolean reponseTrouvee = pile1.deuxMemesButtons();
 		assertTrue(reponseTrouvee);
 		
-		boolean reponseTrouvee2 = pile1.sameButton(NOIR);
-		assertFalse(reponseTrouvee2);
+		pile2.addButton(NOIR);
+		boolean reponseTrouvee2 = pile2.deuxMemesButtons();
+		assertTrue(reponseTrouvee2);
 		
-		boolean reponseTrouvee3 = pile1.sameButton(BLANC);
+		pile1.addButton(BLANC);
+		boolean reponseTrouvee3 = pile1.deuxMemesButtons();
 		assertFalse(reponseTrouvee3);
 	}
 	

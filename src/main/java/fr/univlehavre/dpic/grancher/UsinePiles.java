@@ -99,8 +99,16 @@ public class UsinePiles
 		
 		return indicePileSuivante;
 	}
+	
+	public boolean joueurRejoue(int indicePile, boolean plusieursButtonsPoses)
+	{
+		boolean unSeulButtonPose = !plusieursButtonsPoses;
+		boolean deuxMemesButtons = getPile(indicePile).deuxMemesButtons();
 		
-	// seme la pileDepart sur la pileCourante et retourne vrai si le joueur peut rejouer
+		return unSeulButtonPose && deuxMemesButtons;
+	}
+		
+	// seme la pileDepart sur la pileCourante et retourne vrai si plusieurs boutons ont ete semes
 	public boolean poser(int indicePileDepart, int indicePileCourante)
 	{		
 		PileButton pileCourante = getPile(indicePileCourante);
@@ -109,7 +117,9 @@ public class UsinePiles
 		// verifie si on seme un ou plusieurs boutons sur la pileCourante
 		boolean plusieursButtonsSemes = estRevenuDepart(indicePileDepart,indicePileCourante);
 		
-		return pileDepart.semer(pileCourante, plusieursButtonsSemes);
+		pileDepart.semer(pileCourante, plusieursButtonsSemes);
+		
+		return plusieursButtonsSemes;
 	}
 	
 	// seme la pileChoisie sur toutes les piles suivantes et retourve vrai si le joueur peut rejouer
@@ -117,7 +127,7 @@ public class UsinePiles
 	{
 		int indicePileCourante=indicePileChoisie;
 		PileButton pileChoisie = getPile(indicePileChoisie);
-		boolean sameButton=false;
+		boolean plusieursButtonsSemes=false;
 		
 		while(!pileChoisie.estVide())
 		{
@@ -125,12 +135,13 @@ public class UsinePiles
 			indicePileCourante = pileSuivante(indicePileChoisie,indicePileCourante);
 			
 			// on pose le ou les boutons et on recupere si le joueur peut rejouer
-			sameButton=poser(indicePileChoisie,indicePileCourante);			
+			plusieursButtonsSemes = poser(indicePileChoisie,indicePileCourante);			
 		}
 		
+		boolean joueurRejoue = joueurRejoue(indicePileCourante, plusieursButtonsSemes);
 		listePiles.remove(pileChoisie);
 		
-		return sameButton;
+		return joueurRejoue;
 	}
 	
 	// retourne la liste de piles sous la forme <1[NOIR,BLANC]/2[ROUGE,ROUGE],/3[BLANC,ROUGE,NOIR]>

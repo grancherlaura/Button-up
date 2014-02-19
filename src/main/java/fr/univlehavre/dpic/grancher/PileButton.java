@@ -19,12 +19,9 @@ public class PileButton implements Comparable<PileButton>
 		listeButtons.addAll(listeBoutons);
 	}
 	
-	public boolean addButton(Button bouton)
+	public void addButton(Button bouton)
 	{
-		boolean sameButton = sameButton(bouton);
 		listeButtons.add(bouton);
-		
-		return sameButton;	
 	}
 	
 	public void addPileButton(PileButton listeBoutonsAjoutes)
@@ -32,14 +29,19 @@ public class PileButton implements Comparable<PileButton>
 		listeButtons.addAll(listeBoutonsAjoutes.getListeButtons());
 	}
 	
-	public boolean sameButton(Button bouton)
+	public boolean deuxMemesButtons()
 	{
-		return getSommet().equals(bouton);
+		return getSommet().equals(getDeuxieme());
 	}
 	
 	public Button getSommet()
 	{
 		return listeButtons.get(listeButtons.size()-1);
+	}
+	
+	public Button getDeuxieme()
+	{
+		return listeButtons.get(listeButtons.size()-2);
 	}
 	
 	public ArrayList<Button> getListeButtons()
@@ -58,10 +60,8 @@ public class PileButton implements Comparable<PileButton>
 	}
 	
 	// seme la pile sur la pileCourante
-	public boolean semer(PileButton pileCourante, boolean plusieursButtonsSemes)
+	public void semer(PileButton pileCourante, boolean plusieursButtonsSemes)
 	{
-		boolean sameButton=false;
-		
 		//si on doit semer tous les boutons de la pile
 		if(plusieursButtonsSemes)
 		{
@@ -72,11 +72,9 @@ public class PileButton implements Comparable<PileButton>
 		//si on doit semer seulement un bouton
 		else
 		{
-			sameButton=pileCourante.addButton(this.getButtonDessous());	
+			pileCourante.addButton(this.getButtonDessous());	
 			listeButtons.remove(this.getButtonDessous());
 		}
-		
-		return sameButton;
 	}
 	
 	@Override

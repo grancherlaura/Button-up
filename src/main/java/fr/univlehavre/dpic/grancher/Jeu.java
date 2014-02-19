@@ -46,8 +46,7 @@ public class Jeu
 		return couleur;
 	}
 	
-	// verifie si la manche est terminee
-	public boolean continuer()
+	public boolean continuerManche()
 	{
 		return usine.tailleListe()!=1;
 	}
@@ -221,7 +220,7 @@ public class Jeu
 			System.out.println("\nNouvelle partie !\n");
 			
 			// tant que la manche n'est pas terminee
-			while(continuer())
+			while(continuerManche())
 			{
 				System.out.println(afficherMessage());
 				
