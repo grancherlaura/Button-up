@@ -1,11 +1,13 @@
 package fr.univlehavre.dpic.grancher;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 import org.junit.*;
-import static org.junit.Assert.*;
 
+import fr.univlehavre.dpic.grancher.PileButton.Button;
+import static org.junit.Assert.*;
 import static fr.univlehavre.dpic.grancher.PileButton.Button.*;
 
 public class JeuTest 
@@ -107,6 +109,24 @@ public class JeuTest
 		String resultatTrouve2 = j.afficherNbPoints();
 		
 		assertEquals(resultatAttendu2, resultatTrouve2);		
+	}
+	
+	@Test
+	public void afficherPileFinaleTest()
+	{
+		String resultatAttendu = "\nPile finale\n9 NOIR\n8 NOIR\n7 NOIR\n6 ROUGE\n5 ROUGE\n4 ROUGE\n3 BLANC\n2 BLANC\n1 BLANC\n";
+		
+		ArrayList<Button> listeButtons = new ArrayList<Button>(Arrays.asList(BLANC,BLANC,BLANC,ROUGE,ROUGE,ROUGE,NOIR,NOIR,NOIR));
+		PileButton pile = new PileButton(listeButtons);
+		
+		ArrayList<PileButton> listePile = new ArrayList<PileButton>(Arrays.asList(pile));
+		UsinePiles us = new UsinePiles(listePile);
+		
+		Jeu jeu = new Jeu(us,0,0);
+		
+		String resultatTrouve = jeu.afficherPileFinale();
+		
+		assertEquals(resultatAttendu,resultatTrouve);		
 	}
 	
 	@Test

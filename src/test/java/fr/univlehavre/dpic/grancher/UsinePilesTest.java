@@ -110,6 +110,42 @@ public class UsinePilesTest
 	}
 	
 	@Test
+	public void pileValideTest()
+	{
+		boolean resultat1 = usine.pileValide(-2);
+		boolean resultat2 = usine.pileValide(9);
+		boolean resultat3 = usine.pileValide(3);
+		
+		assertFalse(resultat1);
+		assertFalse(resultat2);
+		assertTrue(resultat3);
+	}
+
+	@Test
+	public void peutRevenirDebutListeTest()
+	{
+		boolean resultat1 = usine.peutRevenirDebutListe(2,8);
+		boolean resultat2 = usine.peutRevenirDebutListe(2,6);
+		boolean resultat3 = usine.peutRevenirDebutListe(0,8);
+		
+		assertTrue(resultat1);
+		assertFalse(resultat2);
+		assertFalse(resultat3);
+	}
+	
+	@Test
+	public void peutPoserSurSuivanttest()
+	{
+		boolean resultat1 = usine.peutPoserSurSuivant(2,4);
+		boolean resultat2 = usine.peutPoserSurSuivant(2,8);
+		boolean resultat3 = usine.peutPoserSurSuivant(4,3);
+		
+		assertTrue(resultat1);
+		assertFalse(resultat2);
+		assertFalse(resultat3);
+	}
+	
+	@Test
 	public void pileSuivanteTest()
 	{
 		int pileSuivanteAttendue = 5;

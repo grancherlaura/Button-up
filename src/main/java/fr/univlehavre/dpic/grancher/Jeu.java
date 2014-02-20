@@ -21,7 +21,7 @@ public class Jeu
 		nbPointsJoueurRouge=0;
 	}
 	
-	public Jeu(UsinePiles usine, int nbPointsJoueurRouge, int nbPointsJoueurNoir)
+	protected Jeu(UsinePiles usine, int nbPointsJoueurRouge, int nbPointsJoueurNoir)
 	{
 		this.usine = usine;
 		this.nbPointsJoueurNoir=nbPointsJoueurNoir;
@@ -54,27 +54,48 @@ public class Jeu
 	// demande à l'utilisateur de saisir une pile
 	public String afficherMessage()
 	{
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder builder = new StringBuilder();
 		
-		buffer.append(usine);
-		buffer.append("\nJoueur ");
-		buffer.append(couleurJoueur(tourJoueur));
-		buffer.append("\nPile choisie : ");
+		builder.append(usine);
+		builder.append("\nJoueur ");
+		builder.append(couleurJoueur(tourJoueur));
+		builder.append("\nPile choisie : ");
 		
-		return buffer.toString();
+		return builder.toString();
 	}
 	
 	public String afficherNbPoints()
 	{
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder builder  = new StringBuilder();
 		
-		buffer.append("\n==================================\nJoueur rouge : ");
-		buffer.append(nbPointsJoueurRouge);
-		buffer.append(", Joueur noir : ");
-		buffer.append(nbPointsJoueurNoir);
-		buffer.append("\n==================================\n");
+		builder.append("\n==================================\nJoueur rouge : ");
+		builder.append(nbPointsJoueurRouge);
+		builder.append(", Joueur noir : ");
+		builder.append(nbPointsJoueurNoir);
+		builder.append("\n==================================\n");
 		
-		return buffer.toString();
+		return builder.toString();
+	}
+	
+	// affiche la pile finale avec le nombre de points que rapporte chaque bouton
+	public String afficherPileFinale()
+	{
+		StringBuilder builder  = new StringBuilder();
+		
+		PileButton pileRestante = usine.getPile(0);
+		ArrayList<Button> listeButtons = pileRestante.getListeButtons();
+		
+		builder.append("\nPile finale\n");
+		
+		for(int i=pileRestante.tailleListe()-1; i>=0; i--)
+		{
+			builder.append(i+1);
+			builder.append(" ");
+			builder.append(listeButtons.get(i));
+			builder.append("\n");
+		}
+		
+		return builder.toString();
 	}
 	
 	// convertit le string en int, retourne -1 si ce n'est pas possible
@@ -181,33 +202,33 @@ public class Jeu
 	// affichage de la couleur du joueur gagnant
 	public String messageGagnant()
 	{
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder builder = new StringBuilder();
 		
-		buffer.append("\nJoueur gagnant : ");
+		builder.append("\nJoueur gagnant : ");
 		
 		if(nbPointsJoueurRouge>nbPointsJoueurNoir)
 		{
-			buffer.append("ROUGE");
+			builder.append("ROUGE");
 		}
 		
 		else
 		{
-			buffer.append("NOIR");
+			builder.append("NOIR");
 		}
 		
-		return buffer.toString();
+		return builder.toString();
 	}
 	
 	// explique au joueur les caracteristiques d'une pile valide et lui repropose de rentrer une nouvelle pile
 	public String messageErreur()
 	{
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder builder = new StringBuilder();
 		
-		buffer.append("\nVeuillez entrer un nombre entre 1 et ");
-		buffer.append(usine.tailleListe());
-		buffer.append(" d'une pile qui contient un blanc : ");
+		builder.append("\nVeuillez entrer un nombre entre 1 et ");
+		builder.append(usine.tailleListe());
+		builder.append(" d'une pile qui contient un blanc : ");
 		
-		return buffer.toString();
+		return builder.toString();
 	}
 	
 	// on fait jouer les 2 joueurs jusqu'a avoir un gagnant
@@ -235,6 +256,8 @@ public class Jeu
 			}
 		
 			compterPoints();
+			System.out.println(afficherPileFinale());
+			
 			// on recommence une nouvelle manche
 			usine = new UsinePiles();
 		}

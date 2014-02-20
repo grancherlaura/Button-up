@@ -13,7 +13,7 @@ public class PileButton implements Comparable<PileButton>
 		listeButtons.add(bouton);
 	}
 	
-	public PileButton(ArrayList<Button> listeBoutons)
+	protected PileButton(ArrayList<Button> listeBoutons)
 	{
 		listeButtons = new ArrayList<Button>();
 		listeButtons.addAll(listeBoutons);
@@ -36,17 +36,22 @@ public class PileButton implements Comparable<PileButton>
 	
 	public Button getSommet()
 	{
-		return listeButtons.get(listeButtons.size()-1);
+		return listeButtons.get(tailleListe()-1);
 	}
 	
 	public Button getDeuxieme()
 	{
-		return listeButtons.get(listeButtons.size()-2);
+		return listeButtons.get(tailleListe()-2);
 	}
 	
 	public ArrayList<Button> getListeButtons()
 	{
 		return listeButtons;
+	}
+	
+	public int tailleListe()
+	{
+		return listeButtons.size();
 	}
 	
 	public boolean estVide()
@@ -131,11 +136,11 @@ public class PileButton implements Comparable<PileButton>
 		
 		builder.append("[");
 				
-		for(int i=0; i<listeButtons.size(); i++)
+		for(int i=0; i<tailleListe(); i++)
 		{
 			builder.append(listeButtons.get(i));
 			
-			if(i<listeButtons.size()-1)
+			if(i<tailleListe()-1)
 			{
 				builder.append(",");
 			}
