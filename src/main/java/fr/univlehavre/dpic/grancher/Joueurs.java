@@ -40,19 +40,26 @@ public class Joueurs
 	
 	public String getGagnant()
 	{
-		String gagnant;
+		String gagnant="NOIR";
 		
 		if(nbPointsJoueurRouge>nbPointsJoueurNoir)
 		{
 			gagnant="ROUGE";
 		}
 		
-		else
-		{
-			gagnant="NOIR";
-		}
-		
 		return gagnant;
+	}
+	
+	public String getPerdant()
+	{
+		String perdant="ROUGE";
+		
+		if(nbPointsJoueurRouge>nbPointsJoueurNoir)
+		{
+			perdant="NOIR";
+		}
+
+		return perdant;
 	}
 	
 	public String getJoueurCourant()
@@ -70,7 +77,6 @@ public class Joueurs
 		nbPointsJoueurNoir+=points;
 	}
 	
-	
 	public int getNbPointsJoueurRouge()
 	{
 		return nbPointsJoueurRouge;
@@ -86,6 +92,11 @@ public class Joueurs
 		return tourJoueur;
 	}
 	
+	public void setTourJoueur(int tour)
+	{
+		tourJoueur=tour;
+	}
+	
 	// retourne vrai si un joueur a depasse les 15 points
 	public boolean existeGagnant()
 	{
@@ -93,6 +104,5 @@ public class Joueurs
 		boolean joueurNoirGagnant = nbPointsJoueurNoir > 14;
 		
 		return joueurRougeGagnant || joueurNoirGagnant;
-	}
-		
+	}	
 }

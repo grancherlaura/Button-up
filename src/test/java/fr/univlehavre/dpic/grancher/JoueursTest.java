@@ -62,6 +62,22 @@ public class JoueursTest
 	}
 	
 	@Test
+	public void getPerdantTest()
+	{
+		Joueurs joueurs2 = new Joueurs(5,16);
+		String joueurAttendu = "ROUGE";
+		String joueurTrouve = joueurs2.getPerdant();
+		
+		assertEquals(joueurAttendu, joueurTrouve);
+		
+		Joueurs joueurs3 = new Joueurs(15,14);
+		String joueurAttendu2 = "NOIR";
+		String joueurTrouve2 = joueurs3.getPerdant();
+		
+		assertEquals(joueurAttendu2, joueurTrouve2);
+	}
+	
+	@Test
 	public void getJoueurCourantTest()
 	{
 		String joueurAttendu = "ROUGE";

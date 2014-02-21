@@ -65,6 +65,18 @@ public class JeuTest
 	}
 
 	@Test
+	public void reponseValideTest()
+	{
+		boolean resultat1 = j.reponseValide("y");
+		boolean resultat2 = j.reponseValide("n");
+		boolean resultat3 = j.reponseValide("tgded");
+		
+		assertTrue(resultat1);
+		assertTrue(resultat2);
+		assertFalse(resultat3);
+	}
+	
+	@Test
 	public void compterPointsTest()
 	{		
 		for(int i=0; i<8; i++)
@@ -108,6 +120,30 @@ public class JeuTest
 		
 		assertEquals(nbPointsJoueurNoirAttendus2, nbPointsJoueurNoirTrouves2);
 		assertEquals(nbPointsJoueurRougeAttendus2, nbPointsJoueurRougeTrouves2);
+	}
+	
+	@Test
+	public void recupererPremierJoueurTest()
+	{		
+		joueurs = new Joueurs(3,16);
+		j = new Jeu(usine,joueurs,affich);
+		
+		int reponseAttendue = 1;
+		int reponseTrouvee = j.recupererPremierJoueur("y");
+		
+		int reponseAttendue2 = 2;
+		int reponseTrouvee2 = j.recupererPremierJoueur("n");
+		
+		joueurs = new Joueurs(15,3);
+		j = new Jeu(usine,joueurs,affich);
+		
+		int reponseTrouvee3 = j.recupererPremierJoueur("y");
+		int reponseTrouvee4 = j.recupererPremierJoueur("n");
+		
+		assertEquals(reponseAttendue, reponseTrouvee);
+		assertEquals(reponseAttendue, reponseTrouvee4);
+		assertEquals(reponseAttendue2, reponseTrouvee2);
+		assertEquals(reponseAttendue2, reponseTrouvee3);
 	}
 	
 	@Test

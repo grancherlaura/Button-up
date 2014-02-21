@@ -69,6 +69,31 @@ public class Jeu
 		return indicePile;
 	}
 	
+	// retourne le numéro de pile choisi par le joueur
+	public String demanderJoueur()
+	{
+		scanner = new Scanner(System.in);
+		
+		String chaineJoueurChoisi = scanner.nextLine();
+		
+		// tant que la pile ne contient pas un pion blanc
+		while(!reponseValide(chaineJoueurChoisi))
+		{
+			System.err.println(affich.messageErreurJoueur());
+			chaineJoueurChoisi = scanner.nextLine();
+		}
+		
+		return chaineJoueurChoisi;
+	}
+	
+	public boolean reponseValide(String chaine)
+	{
+		boolean positif = chaine.equals("y");
+		boolean negatif = chaine.equals("n");
+		
+		return positif || negatif;
+	}
+	
 	public void compterPoints()
 	{
 		PileButton pileRestante = usine.getPile(0);
@@ -108,6 +133,32 @@ public class Jeu
 			joueurs.addNbPointsJoueurNoir(boutonsNoirs-boutonsRouges);
 		}
 	}
+	
+	public void choisirPremierJoueur()
+	{
+		System.out.println(affich.messageChoixJoueur());
+		String reponseJoueur = demanderJoueur();
+		
+		int tourJoueur = recupererPremierJoueur(reponseJoueur);
+		joueurs.setTourJoueur(tourJoueur);
+	}
+	
+	public int recupererPremierJoueur(String reponseJoueur)
+	{
+		boolean joueur1 = joueurs.getPerdant().equals("ROUGE");
+		boolean reponseOui = reponseJoueur.equals("y");
+			
+		boolean joueur1RepondNon = joueur1 && !reponseOui;
+		boolean joueur2RepondOui = !joueur1 && reponseOui;
+		int tour = 1;
+		
+		if(joueur1RepondNon || joueur2RepondOui)
+		{
+			tour = 2;
+		}
+		
+		return tour;		
+	}
 
 	public UsinePiles getUsine()
 	{
@@ -132,6 +183,8 @@ public class Jeu
 		{
 			System.out.println(affich.afficherNbPoints());
 			System.out.println("\nNouvelle partie !\n");
+			
+			choisirPremierJoueur();
 			
 			// tant que la manche n'est pas terminee
 			while(continuerManche())

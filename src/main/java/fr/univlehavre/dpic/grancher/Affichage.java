@@ -79,6 +79,21 @@ public class Affichage
 		return builder.toString();
 	}	
 	
+	public String messageChoixJoueur()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append("\nJoueur ");
+		builder.append(joueurs.getPerdant());
+		builder.append(", voulez-vous jouer en premier ? (y/n) ");
+		
+		return builder.toString();
+	}	
+	
+	public String messageErreurJoueur()
+	{
+		return "\nVeuillez répondre par y ou n !";
+	}	
+	
 	public void setUsinePiles(UsinePiles usine)
 	{
 		this.usine = usine;
