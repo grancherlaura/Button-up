@@ -1,22 +1,22 @@
 package fr.univlehavre.dpic.grancher;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import fr.univlehavre.dpic.grancher.PileButton.Button;
 
 public class Jeu 
 {
 	private UsinePiles usine;
-	private Scanner scanner;
 	private Affichage affich;
 	private Joueurs joueurs;
+	private LectureClavier clavier;
 	
 	public Jeu()
 	{
 		usine = new UsinePiles();
 		joueurs = new Joueurs();
 		affich = new Affichage(usine,joueurs);
+		clavier = new LectureClavier(affich);
 	}
 	
 	protected Jeu(UsinePiles usine, Joueurs joueurs, Affichage affich)
@@ -31,68 +31,7 @@ public class Jeu
 	{
 		return usine.tailleListe()!=1;
 	}
-	
-	// convertit le string en int, retourne -1 si ce n'est pas possible
-	public int convertirEntier(String chainePileChoisie)
-	{
-		int pile;
-		
-		try 
-		{
-			pile=Integer.parseInt(chainePileChoisie)-1;
-		} 
-		
-		catch (NumberFormatException e) 
-		{
-			pile=-1;	
-		}
-		
-		return pile;
-	}
-	
-	// retourne le numéro de pile choisi par le joueur
-	public int demanderPile()
-	{
-		scanner = new Scanner(System.in);
-		
-		String chainePileChoisie = scanner.nextLine();
-		int indicePile = convertirEntier(chainePileChoisie);
-		
-		// tant que la pile ne contient pas un pion blanc
-		while(usine.neContientPasEspion(indicePile))
-		{
-			System.err.println(affich.messageErreur());
-			chainePileChoisie = scanner.nextLine();
-			indicePile = convertirEntier(chainePileChoisie);
-		}
-		
-		return indicePile;
-	}
-	
-	// retourne le numéro de pile choisi par le joueur
-	public String demanderJoueur()
-	{
-		scanner = new Scanner(System.in);
-		
-		String chaineJoueurChoisi = scanner.nextLine();
-		
-		// tant que la pile ne contient pas un pion blanc
-		while(!reponseValide(chaineJoueurChoisi))
-		{
-			System.err.println(affich.messageErreurJoueur());
-			chaineJoueurChoisi = scanner.nextLine();
-		}
-		
-		return chaineJoueurChoisi;
-	}
-	
-	public boolean reponseValide(String chaine)
-	{
-		boolean positif = chaine.equals("y");
-		boolean negatif = chaine.equals("n");
-		
-		return positif || negatif;
-	}
+
 	
 	public void compterPoints()
 	{
@@ -137,13 +76,13 @@ public class Jeu
 	public void choisirPremierJoueur()
 	{
 		System.out.println(affich.messageChoixJoueur());
-		String reponseJoueur = demanderJoueur();
+		String reponseJoueur = clavier.demanderJoueur();
 		
-		int tourJoueur = recupererPremierJoueur(reponseJoueur);
+		int tourJoueur = numeroPremierJoueur(reponseJoueur);
 		joueurs.setTourJoueur(tourJoueur);
 	}
 	
-	public int recupererPremierJoueur(String reponseJoueur)
+	public int numeroPremierJoueur(String reponseJoueur)
 	{
 		boolean joueur1 = joueurs.getPerdant().equals("ROUGE");
 		boolean reponseOui = reponseJoueur.equals("y");
@@ -191,7 +130,7 @@ public class Jeu
 			{
 				System.out.println(affich.afficherMessage());
 				
-				int pile=demanderPile();
+				int pile = clavier.demanderPile();
 				
 				boolean sameButton = usine.semerTouteLaPile(pile);
 				

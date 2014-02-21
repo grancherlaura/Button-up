@@ -48,35 +48,6 @@ public class JeuTest
 	}
 	
 	@Test
-	public void convertirEntierTest()
-	{
-		int resultatAttendu1 = 2;
-		int resultatTrouve1 = j.convertirEntier("3");
-		
-		int resultatAttendu2 = -1;
-		int resultatTrouve2 = j.convertirEntier("0");
-		
-		int resultatAttendu3 = -1;
-		int resultatTrouve3 = j.convertirEntier("azerty");
-		
-		assertEquals(resultatAttendu1, resultatTrouve1);
-		assertEquals(resultatAttendu2, resultatTrouve2);
-		assertEquals(resultatAttendu3, resultatTrouve3);
-	}
-
-	@Test
-	public void reponseValideTest()
-	{
-		boolean resultat1 = j.reponseValide("y");
-		boolean resultat2 = j.reponseValide("n");
-		boolean resultat3 = j.reponseValide("tgded");
-		
-		assertTrue(resultat1);
-		assertTrue(resultat2);
-		assertFalse(resultat3);
-	}
-	
-	@Test
 	public void compterPointsTest()
 	{		
 		for(int i=0; i<8; i++)
@@ -123,22 +94,22 @@ public class JeuTest
 	}
 	
 	@Test
-	public void recupererPremierJoueurTest()
+	public void numeroPremierJoueurTest()
 	{		
 		joueurs = new Joueurs(3,16);
 		j = new Jeu(usine,joueurs,affich);
 		
 		int reponseAttendue = 1;
-		int reponseTrouvee = j.recupererPremierJoueur("y");
+		int reponseTrouvee = j.numeroPremierJoueur("y");
 		
 		int reponseAttendue2 = 2;
-		int reponseTrouvee2 = j.recupererPremierJoueur("n");
+		int reponseTrouvee2 = j.numeroPremierJoueur("n");
 		
 		joueurs = new Joueurs(15,3);
 		j = new Jeu(usine,joueurs,affich);
 		
-		int reponseTrouvee3 = j.recupererPremierJoueur("y");
-		int reponseTrouvee4 = j.recupererPremierJoueur("n");
+		int reponseTrouvee3 = j.numeroPremierJoueur("y");
+		int reponseTrouvee4 = j.numeroPremierJoueur("n");
 		
 		assertEquals(reponseAttendue, reponseTrouvee);
 		assertEquals(reponseAttendue, reponseTrouvee4);
