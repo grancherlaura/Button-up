@@ -12,6 +12,7 @@ public class Jeu
 	private int nbPointsJoueurRouge;
 	private int nbPointsJoueurNoir;
 	private Scanner scanner;
+	private Affichage affich;
 	
 	public Jeu()
 	{
@@ -19,6 +20,8 @@ public class Jeu
 		tourJoueur=1;
 		nbPointsJoueurNoir=0;
 		nbPointsJoueurRouge=0;
+		affich = new Affichage(this);
+		
 	}
 	
 	protected Jeu(UsinePiles usine, int nbPointsJoueurRouge, int nbPointsJoueurNoir)
@@ -26,6 +29,7 @@ public class Jeu
 		this.usine = usine;
 		this.nbPointsJoueurNoir=nbPointsJoueurNoir;
 		this.nbPointsJoueurRouge=nbPointsJoueurRouge;
+		affich = new Affichage(this);
 	}
 
 	public void changerJoueur() 
@@ -51,52 +55,6 @@ public class Jeu
 		return usine.tailleListe()!=1;
 	}
 	
-	// demande à l'utilisateur de saisir une pile
-	public String afficherMessage()
-	{
-		StringBuilder builder = new StringBuilder();
-		
-		builder.append(usine);
-		builder.append("\nJoueur ");
-		builder.append(couleurJoueur(tourJoueur));
-		builder.append("\nPile choisie : ");
-		
-		return builder.toString();
-	}
-	
-	public String afficherNbPoints()
-	{
-		StringBuilder builder  = new StringBuilder();
-		
-		builder.append("\n==================================\nJoueur rouge : ");
-		builder.append(nbPointsJoueurRouge);
-		builder.append(", Joueur noir : ");
-		builder.append(nbPointsJoueurNoir);
-		builder.append("\n==================================\n");
-		
-		return builder.toString();
-	}
-	
-	// affiche la pile finale avec le nombre de points que rapporte chaque bouton
-	public String afficherPileFinale()
-	{
-		StringBuilder builder  = new StringBuilder();
-		
-		PileButton pileRestante = usine.getPile(0);
-		ArrayList<Button> listeButtons = pileRestante.getListeButtons();
-		
-		builder.append("\nPile finale\n");
-		
-		for(int i=pileRestante.tailleListe()-1; i>=0; i--)
-		{
-			builder.append(i+1);
-			builder.append(" ");
-			builder.append(listeButtons.get(i));
-			builder.append("\n");
-		}
-		
-		return builder.toString();
-	}
 	
 	// convertit le string en int, retourne -1 si ce n'est pas possible
 	public int convertirEntier(String chainePileChoisie)
@@ -127,7 +85,7 @@ public class Jeu
 		// tant que la pile ne contient pas un pion blanc
 		while(usine.neContientPasEspion(indicePile))
 		{
-			System.err.println(messageErreur());
+			System.err.println(affich.messageErreur());
 			chainePileChoisie = scanner.nextLine();
 			indicePile = convertirEntier(chainePileChoisie);
 		}
@@ -199,36 +157,10 @@ public class Jeu
 		return usine;
 	}
 	
-	// affichage de la couleur du joueur gagnant
-	public String messageGagnant()
+
+	public Affichage getAffich()
 	{
-		StringBuilder builder = new StringBuilder();
-		
-		builder.append("\nJoueur gagnant : ");
-		
-		if(nbPointsJoueurRouge>nbPointsJoueurNoir)
-		{
-			builder.append("ROUGE");
-		}
-		
-		else
-		{
-			builder.append("NOIR");
-		}
-		
-		return builder.toString();
-	}
-	
-	// explique au joueur les caracteristiques d'une pile valide et lui repropose de rentrer une nouvelle pile
-	public String messageErreur()
-	{
-		StringBuilder builder = new StringBuilder();
-		
-		builder.append("\nVeuillez entrer un nombre entre 1 et ");
-		builder.append(usine.tailleListe());
-		builder.append(" d'une pile qui contient un blanc : ");
-		
-		return builder.toString();
+		return affich;
 	}
 	
 	// on fait jouer les 2 joueurs jusqu'a avoir un gagnant
@@ -237,13 +169,13 @@ public class Jeu
 		// tant qu'un joueur n'a pas atteint les 15 points
 		while(!existeGagnant())
 		{
-			System.out.println(afficherNbPoints());
+			System.out.println(affich.afficherNbPoints());
 			System.out.println("\nNouvelle partie !\n");
 			
 			// tant que la manche n'est pas terminee
 			while(continuerManche())
 			{
-				System.out.println(afficherMessage());
+				System.out.println(affich.afficherMessage());
 				
 				int pile=demanderPile();
 				
@@ -256,14 +188,14 @@ public class Jeu
 			}
 		
 			compterPoints();
-			System.out.println(afficherPileFinale());
+			System.out.println(affich.afficherPileFinale());
 			
 			// on recommence une nouvelle manche
 			usine = new UsinePiles();
 		}
 		
-		System.out.println(afficherNbPoints());
-		System.out.println(messageGagnant());
+		System.out.println(affich.afficherNbPoints());
+		System.out.println(affich.messageGagnant());
 	}
 	
 	public static void main(String args[])

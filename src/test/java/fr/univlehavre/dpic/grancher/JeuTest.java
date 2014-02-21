@@ -75,61 +75,6 @@ public class JeuTest
 	}
 	
 	@Test
-	public void afficherMessageTest()
-	{
-		String resultatAttendu = "<1[BLANC]/2[BLANC]/3[BLANC]/4[ROUGE]/5[ROUGE]/6[ROUGE]/7[NOIR]/8[NOIR]/9[NOIR]>\nJoueur ROUGE\nPile choisie : ";
-		String resultatTrouve = j.afficherMessage();
-		
-		assertEquals(resultatAttendu, resultatTrouve);
-		
-		j.changerJoueur();
-		
-		String resultatAttendu2 = "<1[BLANC]/2[BLANC]/3[BLANC]/4[ROUGE]/5[ROUGE]/6[ROUGE]/7[NOIR]/8[NOIR]/9[NOIR]>\nJoueur NOIR\nPile choisie : ";
-		String resultatTrouve2 = j.afficherMessage();
-		
-		assertEquals(resultatAttendu2, resultatTrouve2);
-	}
-	
-	@Test
-	public void afficherNbPointsTest()
-	{
-		String resultatAttendu = "\n==================================\nJoueur rouge : 0, Joueur noir : 0\n==================================\n";
-		String resultatTrouve = j.afficherNbPoints();
-		
-		assertEquals(resultatAttendu, resultatTrouve);
-		
-		for(int i=0; i<8; i++)
-		{
-			usine.semerTouteLaPile(0);
-		}
-
-		j.compterPoints();
-		
-		String resultatAttendu2 = "\n==================================\nJoueur rouge : 0, Joueur noir : 2\n==================================\n";
-		String resultatTrouve2 = j.afficherNbPoints();
-		
-		assertEquals(resultatAttendu2, resultatTrouve2);		
-	}
-	
-	@Test
-	public void afficherPileFinaleTest()
-	{
-		String resultatAttendu = "\nPile finale\n9 NOIR\n8 NOIR\n7 NOIR\n6 ROUGE\n5 ROUGE\n4 ROUGE\n3 BLANC\n2 BLANC\n1 BLANC\n";
-		
-		ArrayList<Button> listeButtons = new ArrayList<Button>(Arrays.asList(BLANC,BLANC,BLANC,ROUGE,ROUGE,ROUGE,NOIR,NOIR,NOIR));
-		PileButton pile = new PileButton(listeButtons);
-		
-		ArrayList<PileButton> listePile = new ArrayList<PileButton>(Arrays.asList(pile));
-		UsinePiles us = new UsinePiles(listePile);
-		
-		Jeu jeu = new Jeu(us,0,0);
-		
-		String resultatTrouve = jeu.afficherPileFinale();
-		
-		assertEquals(resultatAttendu,resultatTrouve);		
-	}
-	
-	@Test
 	public void convertirEntierTest()
 	{
 		int resultatAttendu1 = 2;
@@ -224,35 +169,5 @@ public class JeuTest
 		UsinePiles usTrouvee = jeu.getUsine();
 		
 		assertEquals(usAttendue, usTrouvee);	
-	}
-	
-	@Test
-	public void messageGagnantTest()
-	{
-		for(int j=0; j<8; j++)
-		{
-			for(int i=0; i<8; i++)
-			{
-				usine.semerTouteLaPile(0);
-			}
-			
-			usine = new UsinePiles();
-		}
-		
-		String messageAttendu = "\nJoueur gagnant : NOIR";
-		String messageTrouve = j.messageGagnant();
-		
-		assertEquals(messageAttendu, messageTrouve);
-	}
-	
-	@Test
-	public void messageErreurTest()
-	{
-		String messageAttendu = "\nVeuillez entrer un nombre entre 1 et 8 d'une pile qui contient un blanc : ";
-		
-		usine.semerTouteLaPile(0);
-		String messageTrouve = j.messageErreur();
-		
-		assertEquals(messageAttendu, messageTrouve);
 	}
 }
