@@ -1,16 +1,14 @@
 package fr.univlehavre.dpic.grancher;
 
-import java.util.ArrayList;
-
-import fr.univlehavre.dpic.grancher.PileButton.Button;
-
 public class Affichage 
 {
-	private Jeu jeu;
+	private UsinePiles usine;
+	private Joueurs joueurs;
 	
-	public Affichage(Jeu j)
+	public Affichage(UsinePiles usine, Joueurs joueurs)
 	{
-		jeu=j;
+		this.usine=usine;
+		this.joueurs=joueurs;
 	}
 	
 	// demande à l'utilisateur de saisir une pile
@@ -18,9 +16,9 @@ public class Affichage
 	{
 		StringBuilder builder = new StringBuilder();
 		
-		builder.append(jeu.getUsine());
+		builder.append(usine);
 		builder.append("\nJoueur ");
-		builder.append(jeu.couleurJoueur(jeu.getTourJoueur()));
+		builder.append(joueurs.getJoueurCourant());
 		builder.append("\nPile choisie : ");
 		
 		return builder.toString();
@@ -29,11 +27,11 @@ public class Affichage
 	public String afficherNbPoints()
 	{
 		StringBuilder builder  = new StringBuilder();
-		
+
 		builder.append("\n==================================\nJoueur rouge : ");
-		builder.append(jeu.getNbPointsJoueurRouge());
+		builder.append(joueurs.getNbPointsJoueurRouge());
 		builder.append(", Joueur noir : ");
-		builder.append(jeu.getNbPointsJoueurNoir());
+		builder.append(joueurs.getNbPointsJoueurNoir());
 		builder.append("\n==================================\n");
 		
 		return builder.toString();
@@ -43,17 +41,15 @@ public class Affichage
 	public String afficherPileFinale()
 	{
 		StringBuilder builder  = new StringBuilder();
-		
-		PileButton pileRestante = jeu.getUsine().getPile(0);
-		ArrayList<Button> listeButtons = pileRestante.getListeButtons();
+		PileButton pileFinale = usine.getPile(0);
 		
 		builder.append("\nPile finale\n");
 		
-		for(int i=pileRestante.tailleListe()-1; i>=0; i--)
+		for(int i=pileFinale.tailleListe()-1; i>=0; i--)
 		{
 			builder.append(i+1);
 			builder.append(" ");
-			builder.append(listeButtons.get(i));
+			builder.append(pileFinale.getListeButtons().get(i));
 			builder.append("\n");
 		}
 		
@@ -66,16 +62,7 @@ public class Affichage
 		StringBuilder builder = new StringBuilder();
 		
 		builder.append("\nJoueur gagnant : ");
-		
-		if(jeu.getNbPointsJoueurRouge()>jeu.getNbPointsJoueurNoir())
-		{
-			builder.append("ROUGE");
-		}
-		
-		else
-		{
-			builder.append("NOIR");
-		}
+		builder.append(joueurs.getGagnant());
 		
 		return builder.toString();
 	}
@@ -86,9 +73,19 @@ public class Affichage
 		StringBuilder builder = new StringBuilder();
 		
 		builder.append("\nVeuillez entrer un nombre entre 1 et ");
-		builder.append(jeu.getUsine().tailleListe());
+		builder.append(usine.tailleListe());
 		builder.append(" d'une pile qui contient un blanc : ");
 		
 		return builder.toString();
 	}	
+	
+	public void setUsinePiles(UsinePiles usine)
+	{
+		this.usine = usine;
+	}
+	
+	protected UsinePiles getUsinePiles()
+	{
+		return usine;
+	}
 }

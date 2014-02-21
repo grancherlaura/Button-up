@@ -19,14 +19,16 @@ public class AffichageTest
 	Affichage affich;
 	Jeu j;
 	UsinePiles usine;
+	Joueurs joueurs;
 	
 	@Before
 	public void setup()
 	{
 		j = new Jeu();
 		usine = j.getUsine();
+		joueurs = j.getJoueurs();
 		Collections.sort(usine.getListePiles());
-		affich = new Affichage(j);
+		affich = new Affichage(usine, joueurs);
 	}
 	
 	@Test
@@ -37,7 +39,7 @@ public class AffichageTest
 		
 		assertEquals(resultatAttendu, resultatTrouve);
 		
-		j.changerJoueur();
+		j.getJoueurs().changerJoueur();
 		
 		String resultatAttendu2 = "<1[BLANC]/2[BLANC]/3[BLANC]/4[ROUGE]/5[ROUGE]/6[ROUGE]/7[NOIR]/8[NOIR]/9[NOIR]>\nJoueur NOIR\nPile choisie : ";
 		String resultatTrouve2 = affich.afficherMessage();
@@ -76,8 +78,8 @@ public class AffichageTest
 		
 		ArrayList<PileButton> listePile = new ArrayList<PileButton>(Arrays.asList(pile));
 		UsinePiles us = new UsinePiles(listePile);
-		
-		Jeu jeu = new Jeu(us,0,0);
+		Joueurs j = new Joueurs();
+		Jeu jeu = new Jeu(us,j, new Affichage(us, j));
 		
 		String resultatTrouve = jeu.getAffich().afficherPileFinale();
 		
@@ -113,5 +115,26 @@ public class AffichageTest
 		
 		assertEquals(messageAttendu, messageTrouve);
 	}
-
+	
+	@Test
+	public void setUsineTest()
+	{
+		UsinePiles usAttendue = new UsinePiles();
+		
+		affich.setUsinePiles(usAttendue);
+		
+		UsinePiles usTrouvee = affich.getUsinePiles();
+		
+		assertEquals(usAttendue, usTrouvee);
+	}
+	
+	@Test
+	public void getUsineTest()
+	{
+		UsinePiles usAttendue = new UsinePiles();
+		Affichage aff = new Affichage(usAttendue,joueurs);
+		UsinePiles usTrouvee = aff.getUsinePiles();
+		
+		assertEquals(usAttendue, usTrouvee);
+	}
 }

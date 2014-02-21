@@ -1,12 +1,10 @@
 package fr.univlehavre.dpic.grancher;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import org.junit.*;
 
-import fr.univlehavre.dpic.grancher.PileButton.Button;
 import static org.junit.Assert.*;
 import static fr.univlehavre.dpic.grancher.PileButton.Button.*;
 
@@ -14,43 +12,17 @@ public class JeuTest
 {
 	Jeu j;
 	UsinePiles usine;
+	Joueurs joueurs;
+	Affichage affich;
 	
 	@Before
 	public void setup()
 	{
 		j = new Jeu();
 		usine = j.getUsine();
+		joueurs = j.getJoueurs();
+		affich = j.getAffich();
 		Collections.sort(usine.getListePiles());
-	}
-	
-	@Test
-	public void changerJoueurTest()
-	{
-		int tourJoueurAttendu = 2;
-		j.changerJoueur();
-		int tourJoueurTrouve = j.getTourJoueur();
-		
-		assertEquals(tourJoueurAttendu, tourJoueurTrouve);
-		
-		int tourJoueurAttendu2 = 1;
-		j.changerJoueur();
-		int tourJoueurTrouve2 = j.getTourJoueur();
-		
-		assertEquals(tourJoueurAttendu2, tourJoueurTrouve2);		
-	}
-	
-	@Test
-	public void couleurJoueurTest()
-	{
-		String couleurAttendue = "ROUGE";		
-		String couleurTrouvee = j.couleurJoueur(1);
-		
-		assertEquals(couleurAttendue, couleurTrouvee);
-		
-		String couleurAttendue2 = "NOIR";		
-		String couleurTrouvee2 = j.couleurJoueur(2);
-		
-		assertEquals(couleurAttendue2, couleurTrouvee2);
 	}
 	
 	@Test
@@ -61,7 +33,8 @@ public class JeuTest
 		listePile.add(pile);
 		
 		UsinePiles usine2 = new UsinePiles(listePile);
-		Jeu j2 = new Jeu(usine2,0,0);
+		Joueurs joueurs = new Joueurs();
+		Jeu j2 = new Jeu(usine2,joueurs, new Affichage(usine2, joueurs));
 		
 		boolean resultat1 = j2.continuerManche();
 		assertFalse(resultat1);
@@ -104,70 +77,73 @@ public class JeuTest
 		int nbPointsJoueurNoirAttendu = 2;
 		int nbPointsJoueurRougeAttendu = 0;
 		
-		int nbPointsJoueurNoirTrouve = j.getNbPointsJoueurNoir();
-		int nbPointsJoueurRougeTrouve = j.getNbPointsJoueurRouge();
+		int nbPointsJoueurNoirTrouve = joueurs.getNbPointsJoueurNoir();
+		int nbPointsJoueurRougeTrouve = joueurs.getNbPointsJoueurRouge();
 		
 		assertEquals(nbPointsJoueurNoirAttendu, nbPointsJoueurNoirTrouve);
 		assertEquals(nbPointsJoueurRougeAttendu, nbPointsJoueurRougeTrouve);
 	}
 	
 	@Test
-	public void existeGagnantTest()
-	{
-		Jeu jeu = new Jeu(new UsinePiles(),5,16);
-		Jeu jeu2 = new Jeu(new UsinePiles(),5,14);
+	public void enregistrerPointsTest()
+	{		
+		int nbPointsJoueurRougeAttendus1 = 3;
+		int nbPointsJoueurNoirAttendus1 = 0;
 		
-		boolean resultat1 = jeu.existeGagnant();
-		boolean resultat2 = jeu2.existeGagnant();
+		j.enregistrerPoints(7, 4);
 		
-		assertTrue(resultat1);
-		assertFalse(resultat2);
-	}
-	
-	@Test
-	public void getTourTest()
-	{
-		int resultatAttendu = 1;
-		int resultatTrouve = j.getTourJoueur();
+		int nbPointsJoueurRougeTrouves1 = joueurs.getNbPointsJoueurRouge();
+		int nbPointsJoueurNoirTrouves1 = joueurs.getNbPointsJoueurNoir();
 		
-		j.changerJoueur();
-		int resultatAttendu2 = 2;
-		int resultatTrouve2 = j.getTourJoueur();
+		assertEquals(nbPointsJoueurNoirAttendus1, nbPointsJoueurNoirTrouves1);
+		assertEquals(nbPointsJoueurRougeAttendus1, nbPointsJoueurRougeTrouves1);
 		
-		assertEquals(resultatAttendu, resultatTrouve);
-		assertEquals(resultatAttendu2, resultatTrouve2);
-	}
-	
-
-	@Test
-	public void getNbPointsJoueurRougeTest()
-	{
-		Jeu jeu = new Jeu(new UsinePiles(), 5, 8);
+		int nbPointsJoueurRougeAttendus2 = 3;
+		int nbPointsJoueurNoirAttendus2 = 5;
 		
-		int resultatAttendu = 5;
-		int resultatTrouve = jeu.getNbPointsJoueurRouge();
-		assertEquals(resultatAttendu, resultatTrouve);
-	}
-	
-	@Test
-	public void getNbPointsJoueurNoirTest()
-	{
-		Jeu jeu = new Jeu(new UsinePiles(), 5, 8);
+		j.enregistrerPoints(5, 10);
 		
-		int resultatAttendu = 8;
-		int resultatTrouve = jeu.getNbPointsJoueurNoir();
-		assertEquals(resultatAttendu, resultatTrouve);
+		int nbPointsJoueurRougeTrouves2 = joueurs.getNbPointsJoueurRouge();
+		int nbPointsJoueurNoirTrouves2 = joueurs.getNbPointsJoueurNoir();
 		
+		assertEquals(nbPointsJoueurNoirAttendus2, nbPointsJoueurNoirTrouves2);
+		assertEquals(nbPointsJoueurRougeAttendus2, nbPointsJoueurRougeTrouves2);
 	}
 	
 	@Test
 	public void getUsineTest()
 	{
 		UsinePiles usAttendue = new UsinePiles();
-		Jeu jeu = new Jeu(usAttendue, 5, 8);
+		Joueurs joueurs = new Joueurs(5,8);
+		
+		Jeu jeu = new Jeu(usAttendue, joueurs, new Affichage(usAttendue, joueurs));
 		
 		UsinePiles usTrouvee = jeu.getUsine();
 		
 		assertEquals(usAttendue, usTrouvee);	
+	}
+	
+	@Test
+	public void getAffichTest()
+	{
+		Affichage affichAttendue = new Affichage(usine,joueurs);
+		
+		Jeu j2 = new Jeu(new UsinePiles(), new Joueurs(0,0), affichAttendue);
+		
+		Affichage affichTrouvee = j2.getAffich();
+		
+		assertEquals(affichAttendue, affichTrouvee);
+	}
+	
+	@Test
+	public void getJoueursTest()
+	{
+		Joueurs joueursAttendus = new Joueurs(5, 4);
+		
+		Jeu j2 = new Jeu(usine, joueursAttendus, affich);
+		
+		Joueurs joueursTrouves = j2.getJoueurs();
+		
+		assertEquals(joueursAttendus, joueursTrouves);
 	}
 }

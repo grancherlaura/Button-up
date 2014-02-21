@@ -8,53 +8,29 @@ import fr.univlehavre.dpic.grancher.PileButton.Button;
 public class Jeu 
 {
 	private UsinePiles usine;
-	private int tourJoueur;
-	private int nbPointsJoueurRouge;
-	private int nbPointsJoueurNoir;
 	private Scanner scanner;
 	private Affichage affich;
+	private Joueurs joueurs;
 	
 	public Jeu()
 	{
 		usine = new UsinePiles();
-		tourJoueur=1;
-		nbPointsJoueurNoir=0;
-		nbPointsJoueurRouge=0;
-		affich = new Affichage(this);
-		
+		joueurs = new Joueurs();
+		affich = new Affichage(usine,joueurs);
 	}
 	
-	protected Jeu(UsinePiles usine, int nbPointsJoueurRouge, int nbPointsJoueurNoir)
+	protected Jeu(UsinePiles usine, Joueurs joueurs, Affichage affich)
 	{
 		this.usine = usine;
-		this.nbPointsJoueurNoir=nbPointsJoueurNoir;
-		this.nbPointsJoueurRouge=nbPointsJoueurRouge;
-		affich = new Affichage(this);
+		this.joueurs=joueurs;
+		this.affich = affich;
 	}
 
-	public void changerJoueur() 
-	{
-		tourJoueur = 3 - tourJoueur;
-	}
-	
-	// joueur1 = rouge, joueur2 = noir
-	public String couleurJoueur(int joueur)
-	{
-		String couleur="NOIR";
-		
-		if(joueur==1)
-		{
-			couleur="ROUGE";
-		}
-		
-		return couleur;
-	}
-	
+
 	public boolean continuerManche()
 	{
 		return usine.tailleListe()!=1;
 	}
-	
 	
 	// convertit le string en int, retourne -1 si ce n'est pas possible
 	public int convertirEntier(String chainePileChoisie)
@@ -116,58 +92,43 @@ public class Jeu
 			}
 		}
 		
+		enregistrerPoints(boutonsRouges,boutonsNoirs);
+	}
+	
+	public void enregistrerPoints(int boutonsRouges, int boutonsNoirs)
+	{
 		// points du joueur gagnant = valeur de ses boutons - valeur des boutons de l'adversaire
 		if(boutonsRouges>boutonsNoirs)
 		{
-			nbPointsJoueurRouge+=boutonsRouges-boutonsNoirs;
+			joueurs.addNbPointsJoueurRouge(boutonsRouges-boutonsNoirs);
 		}
 		
 		else
 		{
-			nbPointsJoueurNoir+=boutonsNoirs-boutonsRouges;
+			joueurs.addNbPointsJoueurNoir(boutonsNoirs-boutonsRouges);
 		}
 	}
 
-	// retourne vrai si un joueur a depasse les 15 points
-	public boolean existeGagnant()
-	{
-		boolean joueurRougeGagnant = nbPointsJoueurRouge > 14;
-		boolean joueurNoirGagnant = nbPointsJoueurNoir > 14;
-		
-		return joueurRougeGagnant || joueurNoirGagnant;
-	}
-	
-	public int getTourJoueur()
-	{
-		return tourJoueur;
-	}
-	
-	public int getNbPointsJoueurRouge()
-	{
-		return nbPointsJoueurRouge;
-	}
-	
-	public int getNbPointsJoueurNoir()
-	{
-		return nbPointsJoueurNoir;
-	}
-	
 	public UsinePiles getUsine()
 	{
 		return usine;
 	}
 	
-
 	public Affichage getAffich()
 	{
 		return affich;
+	}
+	
+	public Joueurs getJoueurs()
+	{
+		return joueurs;
 	}
 	
 	// on fait jouer les 2 joueurs jusqu'a avoir un gagnant
 	public void jouer()
 	{
 		// tant qu'un joueur n'a pas atteint les 15 points
-		while(!existeGagnant())
+		while(!joueurs.existeGagnant())
 		{
 			System.out.println(affich.afficherNbPoints());
 			System.out.println("\nNouvelle partie !\n");
@@ -183,7 +144,7 @@ public class Jeu
 				
 				if(!sameButton)
 				{
-					changerJoueur();
+					joueurs.changerJoueur();
 				}
 			}
 		
@@ -192,6 +153,7 @@ public class Jeu
 			
 			// on recommence une nouvelle manche
 			usine = new UsinePiles();
+			affich.setUsinePiles(usine);
 		}
 		
 		System.out.println(affich.afficherNbPoints());
