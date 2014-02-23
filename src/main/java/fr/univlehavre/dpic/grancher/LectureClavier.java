@@ -72,5 +72,4 @@ public class LectureClavier
 		
 		return positif || negatif;
 	}
-		
 }

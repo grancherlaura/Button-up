@@ -95,26 +95,30 @@ public class JeuTest
 	
 	@Test
 	public void numeroPremierJoueurTest()
-	{		
-		joueurs = new Joueurs(3,16);
-		j = new Jeu(usine,joueurs,affich);
-		
+	{				
 		int reponseAttendue = 1;
-		int reponseTrouvee = j.numeroPremierJoueur("y");
-		
 		int reponseAttendue2 = 2;
-		int reponseTrouvee2 = j.numeroPremierJoueur("n");
-		
-		joueurs = new Joueurs(15,3);
-		j = new Jeu(usine,joueurs,affich);
-		
-		int reponseTrouvee3 = j.numeroPremierJoueur("y");
-		int reponseTrouvee4 = j.numeroPremierJoueur("n");
+		int reponseTrouvee = j.numeroPremierJoueur("y");
+		int reponseTrouvee2 = j.numeroPremierJoueur("n");		
 		
 		assertEquals(reponseAttendue, reponseTrouvee);
-		assertEquals(reponseAttendue, reponseTrouvee4);
 		assertEquals(reponseAttendue2, reponseTrouvee2);
-		assertEquals(reponseAttendue2, reponseTrouvee3);
+		
+		usine.semerTouteLaPile(2);
+		usine.semerTouteLaPile(2);
+		usine.semerTouteLaPile(1);
+		usine.semerTouteLaPile(1);
+		usine.semerTouteLaPile(0);
+		usine.semerTouteLaPile(2);
+		usine.semerTouteLaPile(0);
+		usine.semerTouteLaPile(1);
+		j.compterPoints();
+	
+		int reponseTrouvee3 = j.numeroPremierJoueur("n");
+		int reponseTrouvee4 = j.numeroPremierJoueur("y");
+		
+		assertEquals(reponseAttendue, reponseTrouvee3);
+		assertEquals(reponseAttendue2, reponseTrouvee4);
 	}
 	
 	@Test

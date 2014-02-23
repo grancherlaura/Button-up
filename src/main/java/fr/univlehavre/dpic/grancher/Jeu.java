@@ -1,6 +1,11 @@
 package fr.univlehavre.dpic.grancher;
 
+import static fr.univlehavre.dpic.grancher.PileButton.Button.BLANC;
+import static fr.univlehavre.dpic.grancher.PileButton.Button.NOIR;
+import static fr.univlehavre.dpic.grancher.PileButton.Button.ROUGE;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import fr.univlehavre.dpic.grancher.PileButton.Button;
 
@@ -13,7 +18,27 @@ public class Jeu
 	
 	public Jeu()
 	{
-		usine = new UsinePiles();
+		PileButton pileBlanc1 = new PileButton(BLANC);
+		PileButton pileBlanc2 = new PileButton(BLANC);
+		PileButton pileBlanc3 = new PileButton(BLANC);
+		PileButton pileRouge1 = new PileButton(ROUGE);
+		PileButton pileRouge2 = new PileButton(ROUGE);
+		PileButton pileRouge3 = new PileButton(ROUGE);
+		PileButton pileNoir1 = new PileButton(NOIR);
+		PileButton pileNoir2 = new PileButton(NOIR);
+		PileButton pileNoir3 = new PileButton(NOIR);
+		
+		ArrayList<PileButton> listePiles = new ArrayList<PileButton>(Arrays.asList(pileRouge1,
+																				   pileNoir1,
+																				   pileBlanc1,
+																				   pileBlanc2,
+																				   pileBlanc3,
+																				   pileNoir2,
+																				   pileNoir3,
+																				   pileRouge2,
+																				   pileRouge3));
+		
+		usine = new UsinePiles(listePiles);
 		joueurs = new Joueurs();
 		affich = new Affichage(usine,joueurs);
 		clavier = new LectureClavier(affich);
@@ -31,7 +56,6 @@ public class Jeu
 	{
 		return usine.tailleListe()!=1;
 	}
-
 	
 	public void compterPoints()
 	{
@@ -65,11 +89,13 @@ public class Jeu
 		if(boutonsRouges>boutonsNoirs)
 		{
 			joueurs.addNbPointsJoueurRouge(boutonsRouges-boutonsNoirs);
+			joueurs.setDernierPerdant(2);
 		}
 		
 		else
 		{
 			joueurs.addNbPointsJoueurNoir(boutonsNoirs-boutonsRouges);
+			joueurs.setDernierPerdant(1);
 		}
 	}
 	
@@ -84,7 +110,7 @@ public class Jeu
 	
 	public int numeroPremierJoueur(String reponseJoueur)
 	{
-		boolean joueur1 = joueurs.getPerdant().equals("ROUGE");
+		boolean joueur1 = joueurs.getDernierPerdant().equals("ROUGE");
 		boolean reponseOui = reponseJoueur.equals("y");
 			
 		boolean joueur1RepondNon = joueur1 && !reponseOui;
@@ -114,6 +140,23 @@ public class Jeu
 		return joueurs;
 	}
 	
+	public void deroulerManche()
+	{
+		while(continuerManche())
+		{
+			System.out.println(affich.afficherMessage());
+			
+			int pile = clavier.demanderPile();
+			
+			boolean memeButton = usine.semerTouteLaPile(pile);
+			
+			if(!memeButton)
+			{
+				joueurs.changerJoueur();
+			}
+		}
+	}
+	
 	// on fait jouer les 2 joueurs jusqu'a avoir un gagnant
 	public void jouer()
 	{
@@ -124,28 +167,13 @@ public class Jeu
 			System.out.println("\nNouvelle partie !\n");
 			
 			choisirPremierJoueur();
-			
-			// tant que la manche n'est pas terminee
-			while(continuerManche())
-			{
-				System.out.println(affich.afficherMessage());
-				
-				int pile = clavier.demanderPile();
-				
-				boolean sameButton = usine.semerTouteLaPile(pile);
-				
-				if(!sameButton)
-				{
-					joueurs.changerJoueur();
-				}
-			}
-		
+			deroulerManche();
 			compterPoints();
+			
 			System.out.println(affich.afficherPileFinale());
 			
 			// on recommence une nouvelle manche
-			usine = new UsinePiles();
-			affich.setUsinePiles(usine);
+			usine.genererUsineAleatoire();			
 		}
 		
 		System.out.println(affich.afficherNbPoints());

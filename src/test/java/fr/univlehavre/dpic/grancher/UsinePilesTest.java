@@ -24,6 +24,48 @@ public class UsinePilesTest
 	}
 	
 	@Test
+	public void genereUsineAleatoireTest()
+	{		
+		UsinePiles usine1 = new UsinePiles(new ArrayList<PileButton>());
+		usine1.genererUsineAleatoire();
+		
+		UsinePiles usine2 = new UsinePiles(new ArrayList<PileButton>());
+		usine2.genererUsineAleatoire();
+		
+		ArrayList<PileButton> liste1 = usine1.getListePiles();
+		ArrayList<PileButton> liste2 = usine2.getListePiles();
+		
+		boolean resultat = liste1.equals(liste2);
+		assertFalse(resultat);	
+		
+		Collections.sort(liste1);
+		Collections.sort(liste2);
+		
+		assertEquals(liste1,liste2);
+	}
+	
+	@Test
+	public void supprimerToutesLesPilesTest()
+	{
+		int resultatAttendu = 0;
+		usine.supprimerToutesLesPiles();
+		int resultatTrouvee = usine.tailleListe();
+		
+		assertEquals(resultatAttendu,resultatTrouvee);
+	}
+	
+	@Test
+	public void melangerPilesTest()
+	{
+		UsinePiles usine2 = new UsinePiles();
+		usine2.melangerPiles();
+		
+		boolean resultat = usine.getListePiles().equals(usine2.getListePiles());
+		
+		assertFalse(resultat);		
+	}
+	
+	@Test
 	public void getListePilesTest()
 	{
 		ArrayList<PileButton> listeAttendue = new ArrayList<PileButton>(Arrays.asList(new PileButton(ROUGE), new PileButton(NOIR), new PileButton(BLANC)));
@@ -181,13 +223,44 @@ public class UsinePilesTest
 		ArrayList<PileButton> liste = new ArrayList<PileButton>(Arrays.asList(pile1, pile2));
 		UsinePiles us = new UsinePiles(liste);
 		
-		boolean resultat1 = us.joueurRejoue(1, false);
-		boolean resultat2 = us.joueurRejoue(0, false);
-		boolean resultat3 = us.joueurRejoue(0, true);
+		boolean resultat1 = us.joueurRejoue(1);
+		boolean resultat2 = us.joueurRejoue(0);
+		boolean resultat3 = us.joueurRejoue(0);
 		
 		assertTrue(resultat1);
 		assertFalse(resultat2);
 		assertFalse(resultat3);
+		
+		PileButton pileBlanc1 = new PileButton(BLANC);
+		PileButton pileBlanc2 = new PileButton(BLANC);
+		PileButton pileBlanc3 = new PileButton(BLANC);
+		PileButton pileRouge1 = new PileButton(ROUGE);
+		PileButton pileRouge2 = new PileButton(ROUGE);
+		PileButton pileRouge3 = new PileButton(ROUGE);
+		PileButton pileNoir1 = new PileButton(NOIR);
+		PileButton pileNoir2 = new PileButton(NOIR);
+		PileButton pileNoir3 = new PileButton(NOIR);
+		
+		ArrayList<PileButton> listePiles = new ArrayList<PileButton>(Arrays.asList(pileRouge1,
+																				   pileNoir1,
+																				   pileBlanc1,
+																				   pileBlanc2,
+																				   pileBlanc3,
+																				   pileNoir2,
+																				   pileNoir3,
+																				   pileRouge2,
+																				   pileRouge3));
+		UsinePiles us2 = new UsinePiles(listePiles);
+		
+		us2.semerTouteLaPile(2);
+		us2.semerTouteLaPile(2);
+		us2.semerTouteLaPile(2);
+		us2.semerTouteLaPile(2);
+		us2.semerTouteLaPile(2);
+		
+		boolean resultat = us2.semerTouteLaPile(2);
+		
+		assertTrue(resultat);
 	}
 	
 	@Test
@@ -220,8 +293,9 @@ public class UsinePilesTest
 		assertEquals(listeAttendue2,listeTrouve2);
 		assertEquals(listeAttendue3,listeTrouve3);
 		
+		int ind = usine2.pileSuivante(1,2);
 		// on seme pile2 sur pile1 donc tout va sur pile1
-		usine2.poser(1,0);
+		usine2.poser(1,ind);
 		
 		ArrayList<Button> listeAttendue4 = new ArrayList<Button>(Arrays.asList(NOIR, BLANC, ROUGE, ROUGE));
 		ArrayList<Button> listeAttendue5 = new ArrayList<Button>();

@@ -83,7 +83,7 @@ public class Affichage
 	{
 		StringBuilder builder = new StringBuilder();
 		builder.append("\nJoueur ");
-		builder.append(joueurs.getPerdant());
+		builder.append(joueurs.getDernierPerdant());
 		builder.append(", voulez-vous jouer en premier ? (y/n) ");
 		
 		return builder.toString();
@@ -93,11 +93,6 @@ public class Affichage
 	{
 		return "\nVeuillez répondre par y ou n !";
 	}	
-	
-	public void setUsinePiles(UsinePiles usine)
-	{
-		this.usine = usine;
-	}
 	
 	protected UsinePiles getUsinePiles()
 	{

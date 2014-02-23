@@ -120,21 +120,23 @@ public class AffichageTest
 	public void messageChoixJoueurTest()
 	{
 		String chaineAttendue1 = "\nJoueur ROUGE, voulez-vous jouer en premier ? (y/n) ";
-		joueurs.addNbPointsJoueurNoir(16);
-		joueurs.addNbPointsJoueurRouge(4);
-		
 		String chaineTrouvee1 = affich.messageChoixJoueur();
 		
 		assertEquals(chaineAttendue1, chaineTrouvee1);
 		
 		String chaineAttendue2 = "\nJoueur NOIR, voulez-vous jouer en premier ? (y/n) ";
 		
-		joueurs=new Joueurs();
-		joueurs.addNbPointsJoueurNoir(6);
-		joueurs.addNbPointsJoueurRouge(15);
-		Affichage aff = new Affichage(usine,joueurs);
+		usine.semerTouteLaPile(2);
+		usine.semerTouteLaPile(2);
+		usine.semerTouteLaPile(1);
+		usine.semerTouteLaPile(1);
+		usine.semerTouteLaPile(0);
+		usine.semerTouteLaPile(2);
+		usine.semerTouteLaPile(0);
+		usine.semerTouteLaPile(1);
+		j.compterPoints();
 		
-		String chaineTrouvee2= aff.messageChoixJoueur();
+		String chaineTrouvee2= affich.messageChoixJoueur();
 		
 		assertEquals(chaineAttendue2, chaineTrouvee2);
 	}	
@@ -146,18 +148,6 @@ public class AffichageTest
 		String reponseTrouvee = affich.messageErreurJoueur();
 		
 		assertEquals(reponseAttendue, reponseTrouvee);	
-	}
-	
-	@Test
-	public void setUsineTest()
-	{
-		UsinePiles usAttendue = new UsinePiles();
-		
-		affich.setUsinePiles(usAttendue);
-		
-		UsinePiles usTrouvee = affich.getUsinePiles();
-		
-		assertEquals(usAttendue, usTrouvee);
 	}
 	
 	@Test

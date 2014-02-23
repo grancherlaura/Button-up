@@ -5,12 +5,14 @@ public class Joueurs
 	private int tourJoueur;
 	private int nbPointsJoueurRouge;
 	private int nbPointsJoueurNoir;
+	private int dernierPerdant;
 	
 	public Joueurs()
 	{
-		tourJoueur=1;
+		tourJoueur = 1;
 		nbPointsJoueurNoir=0;
 		nbPointsJoueurRouge=0;
+		dernierPerdant = 1;
 	}
 	
 	protected Joueurs(int nbPointsJoueurRouge, int nbPointsJoueurNoir)
@@ -50,16 +52,9 @@ public class Joueurs
 		return gagnant;
 	}
 	
-	public String getPerdant()
+	public String getDernierPerdant()
 	{
-		String perdant="ROUGE";
-		
-		if(nbPointsJoueurRouge>nbPointsJoueurNoir)
-		{
-			perdant="NOIR";
-		}
-
-		return perdant;
+		return couleurJoueur(dernierPerdant);
 	}
 	
 	public String getJoueurCourant()
@@ -95,6 +90,11 @@ public class Joueurs
 	public void setTourJoueur(int tour)
 	{
 		tourJoueur=tour;
+	}
+	
+	public void setDernierPerdant(int perdant)
+	{
+		dernierPerdant = perdant;
 	}
 	
 	// retourne vrai si un joueur a depasse les 15 points
