@@ -13,7 +13,7 @@ public class LectureClavierTest
 	@Before
 	public void setup()
 	{
-		affich = new Affichage(new UsinePiles(), new Joueurs());
+		affich = new Affichage(new Plateau(), new Joueurs());
 		clavier = new LectureClavier(affich);
 	}
 	

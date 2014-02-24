@@ -18,17 +18,17 @@ public class AffichageTest
 {
 	Affichage affich;
 	Jeu j;
-	UsinePiles usine;
+	Plateau plateau;
 	Joueurs joueurs;
 	
 	@Before
 	public void setup()
 	{
 		j = new Jeu();
-		usine = j.getUsine();
+		plateau = j.getPlateau();
 		joueurs = j.getJoueurs();
-		Collections.sort(usine.getListePiles());
-		affich = new Affichage(usine, joueurs);
+		Collections.sort(plateau.getListePiles());
+		affich = new Affichage(plateau, joueurs);
 	}
 	
 	@Test
@@ -57,7 +57,7 @@ public class AffichageTest
 		
 		for(int i=0; i<8; i++)
 		{
-			j.getUsine().semerTouteLaPile(0);
+			j.getPlateau().semerTouteLaPile(0);
 		}
 
 		j.compterPoints();
@@ -77,7 +77,7 @@ public class AffichageTest
 		PileButton pile = new PileButton(listeButtons);
 		
 		ArrayList<PileButton> listePile = new ArrayList<PileButton>(Arrays.asList(pile));
-		UsinePiles us = new UsinePiles(listePile);
+		Plateau us = new Plateau(listePile);
 		Joueurs j = new Joueurs();
 		Jeu jeu = new Jeu(us,j, new Affichage(us, j));
 		
@@ -93,10 +93,10 @@ public class AffichageTest
 		{
 			for(int i=0; i<8; i++)
 			{
-				usine.semerTouteLaPile(0);
+				plateau.semerTouteLaPile(0);
 			}
 			
-			usine = new UsinePiles();
+			plateau = new Plateau();
 		}
 		
 		String messageAttendu = "\nJoueur gagnant : NOIR";
@@ -110,7 +110,7 @@ public class AffichageTest
 	{
 		String messageAttendu = "\nVeuillez entrer un nombre entre 1 et 8 d'une pile qui contient un blanc : ";
 		
-		usine.semerTouteLaPile(0);
+		plateau.semerTouteLaPile(0);
 		String messageTrouve = affich.messageErreur();
 		
 		assertEquals(messageAttendu, messageTrouve);
@@ -126,14 +126,14 @@ public class AffichageTest
 		
 		String chaineAttendue2 = "\nJoueur NOIR, voulez-vous jouer en premier ? (y/n) ";
 		
-		usine.semerTouteLaPile(2);
-		usine.semerTouteLaPile(2);
-		usine.semerTouteLaPile(1);
-		usine.semerTouteLaPile(1);
-		usine.semerTouteLaPile(0);
-		usine.semerTouteLaPile(2);
-		usine.semerTouteLaPile(0);
-		usine.semerTouteLaPile(1);
+		plateau.semerTouteLaPile(2);
+		plateau.semerTouteLaPile(2);
+		plateau.semerTouteLaPile(1);
+		plateau.semerTouteLaPile(1);
+		plateau.semerTouteLaPile(0);
+		plateau.semerTouteLaPile(2);
+		plateau.semerTouteLaPile(0);
+		plateau.semerTouteLaPile(1);
 		j.compterPoints();
 		
 		String chaineTrouvee2= affich.messageChoixJoueur();
@@ -151,11 +151,11 @@ public class AffichageTest
 	}
 	
 	@Test
-	public void getUsineTest()
+	public void getPlateauTest()
 	{
-		UsinePiles usAttendue = new UsinePiles();
+		Plateau usAttendue = new Plateau();
 		Affichage aff = new Affichage(usAttendue,joueurs);
-		UsinePiles usTrouvee = aff.getUsinePiles();
+		Plateau usTrouvee = aff.getPlateau();
 		
 		assertEquals(usAttendue, usTrouvee);
 	}

@@ -1,52 +1,27 @@
 package fr.univlehavre.dpic.grancher;
 
-import static fr.univlehavre.dpic.grancher.PileButton.Button.BLANC;
-import static fr.univlehavre.dpic.grancher.PileButton.Button.NOIR;
-import static fr.univlehavre.dpic.grancher.PileButton.Button.ROUGE;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import fr.univlehavre.dpic.grancher.PileButton.Button;
 
 public class Jeu 
 {
-	private UsinePiles usine;
+	private Plateau plateau;
 	private Affichage affich;
 	private Joueurs joueurs;
 	private LectureClavier clavier;
 	
 	public Jeu()
 	{
-		PileButton pileBlanc1 = new PileButton(BLANC);
-		PileButton pileBlanc2 = new PileButton(BLANC);
-		PileButton pileBlanc3 = new PileButton(BLANC);
-		PileButton pileRouge1 = new PileButton(ROUGE);
-		PileButton pileRouge2 = new PileButton(ROUGE);
-		PileButton pileRouge3 = new PileButton(ROUGE);
-		PileButton pileNoir1 = new PileButton(NOIR);
-		PileButton pileNoir2 = new PileButton(NOIR);
-		PileButton pileNoir3 = new PileButton(NOIR);
-		
-		ArrayList<PileButton> listePiles = new ArrayList<PileButton>(Arrays.asList(pileRouge1,
-																				   pileNoir1,
-																				   pileBlanc1,
-																				   pileBlanc2,
-																				   pileBlanc3,
-																				   pileNoir2,
-																				   pileNoir3,
-																				   pileRouge2,
-																				   pileRouge3));
-		
-		usine = new UsinePiles(listePiles);
+		plateau = new Plateau();
 		joueurs = new Joueurs();
-		affich = new Affichage(usine,joueurs);
+		affich = new Affichage(plateau,joueurs);
 		clavier = new LectureClavier(affich);
 	}
 	
-	protected Jeu(UsinePiles usine, Joueurs joueurs, Affichage affich)
+	protected Jeu(Plateau plateau, Joueurs joueurs, Affichage affich)
 	{
-		this.usine = usine;
+		this.plateau = plateau;
 		this.joueurs=joueurs;
 		this.affich = affich;
 	}
@@ -54,12 +29,12 @@ public class Jeu
 
 	public boolean continuerManche()
 	{
-		return usine.tailleListe()!=1;
+		return plateau.tailleListe()!=1;
 	}
 	
 	public void compterPoints()
 	{
-		PileButton pileRestante = usine.getPile(0);
+		PileButton pileRestante = plateau.getPile(0);
 		ArrayList<Button> listeButtons = pileRestante.getListeButtons();
 		int boutonsRouges = 0;
 		int boutonsNoirs = 0;
@@ -125,9 +100,9 @@ public class Jeu
 		return tour;		
 	}
 
-	public UsinePiles getUsine()
+	public Plateau getPlateau()
 	{
-		return usine;
+		return plateau;
 	}
 	
 	public Affichage getAffich()
@@ -148,7 +123,7 @@ public class Jeu
 			
 			int pile = clavier.demanderPile();
 			
-			boolean memeButton = usine.semerTouteLaPile(pile);
+			boolean memeButton = plateau.semerTouteLaPile(pile);
 			
 			if(!memeButton)
 			{
@@ -173,7 +148,7 @@ public class Jeu
 			System.out.println(affich.afficherPileFinale());
 			
 			// on recommence une nouvelle manche
-			usine.genererUsineAleatoire();			
+			plateau.genererPlateauAleatoire();			
 		}
 		
 		System.out.println(affich.afficherNbPoints());

@@ -5,26 +5,29 @@ import java.util.Collections;
 
 import fr.univlehavre.dpic.grancher.PileButton.Button;
 
-public class UsinePiles 
+public class Plateau 
 {
 	private ArrayList<PileButton> listePiles;
 	private final static int NB_BOUTONS = 3;
 	private boolean revenuDepart;
+	private VerifPile verif;
 	
-	public UsinePiles()
+	public Plateau()
 	{
 		listePiles = new ArrayList<PileButton>();
-		genererUsineAleatoire();
+		genererPlateauAleatoire();
 		revenuDepart = false;
+		verif = new VerifPile(this);
 	}
 	
-	protected UsinePiles(ArrayList<PileButton> listePiles)
+	protected Plateau(ArrayList<PileButton> listePiles)
 	{
 		this.listePiles =  listePiles;
 		revenuDepart = false;
+		verif = new VerifPile(this);
 	}
 	
-	public void genererUsineAleatoire()
+	public void genererPlateauAleatoire()
 	{
 		supprimerToutesLesPiles();
 		
@@ -59,66 +62,14 @@ public class UsinePiles
 		return listePiles.size();
 	}
 	
-	// retourne vrai si on arrive à la fin de la liste
-	public boolean estFinListe(int indicePileCourante)
-	{
-		return indicePileCourante==tailleListe()-1;
-	}
-	
-	// retourne vrai si on revient sur la pile qu'on a choisi de semer
-	public boolean estRevenuDepart(int indicePileDepart, int indicePileCourante)
-	{
-		return indicePileDepart==(indicePileCourante+1);
-	}
-	
-	// retourne vrai si aucun bouton blanc n'apparait dans la pile
-	public boolean neContientPasEspion(int indicePile)
-	{
-		boolean pasEspion = true;
-		
-		if(pileValide(indicePile))
-		{
-			PileButton pileValide = getPile(indicePile);
-			pasEspion = !pileValide.contientEspion();
-		}
-		
-		return pasEspion;
-	}
-	
 	public PileButton getPile(int indicePile)
 	{
 		return listePiles.get(indicePile);
 	}
 	
-	// retourne vrai si la pile ne fait pas partie de la liste
-	public boolean pileInvalide(int indicePile) 
-	{		
-		boolean nombreTropPetit = indicePile < 0;
-		boolean nombreTropGrand = indicePile >= tailleListe();
-		
-		return nombreTropPetit || nombreTropGrand;
-	}
-	
-	// retourne vrai si la pile fait partie de la liste
-	public boolean pileValide(int indicePile) 
-	{		
-		return !pileInvalide(indicePile);
-	}
-
-	public boolean peutRevenirDebutListe(int indicePileDepart, int indicePileCourante)
+	public VerifPile getVerifUsine()
 	{
-		boolean estFinListe = estFinListe(indicePileCourante);
-		boolean pasRevenuDepart = !estRevenuDepart(indicePileDepart, -1);
-		
-		return estFinListe && pasRevenuDepart;
-	}
-	
-	public boolean peutPoserSurSuivant(int indicePileDepart, int indicePileCourante)
-	{
-		boolean arrivePasFinListe = !estFinListe(indicePileCourante);
-		boolean pasRevenuDepart = !estRevenuDepart(indicePileDepart, indicePileCourante);
-		
-		return arrivePasFinListe && pasRevenuDepart;
+		return verif;
 	}
 	
 	// retourne la pile suivante sur laquelle ont doit semer pileDepart
@@ -126,13 +77,13 @@ public class UsinePiles
 	{
 		int indicePileSuivante=indicePileCourante;
 		
-		if(peutRevenirDebutListe(indicePileDepart, indicePileCourante))
+		if(verif.peutRevenirDebutListe(indicePileDepart, indicePileCourante))
 		{	
 			indicePileSuivante = 0;
 			revenuDepart = false;
 		}
 			
-		else if(peutPoserSurSuivant(indicePileDepart, indicePileCourante))
+		else if(verif.peutPoserSurSuivant(indicePileDepart, indicePileCourante))
 		{
 			indicePileSuivante++;
 			revenuDepart = false;
@@ -160,7 +111,7 @@ public class UsinePiles
 		PileButton pileCourante = getPile(indicePileCourante);
 		PileButton pileDepart = getPile(indicePileDepart);
 
-		boolean plusieursButtons = estRevenuDepart(indicePileDepart, indicePileCourante);
+		boolean plusieursButtons = verif.estRevenuDepart(indicePileDepart, indicePileCourante);
 		
 		// verifie si on seme un ou plusieurs boutons sur la pileCourante
 		pileDepart.semer(pileCourante, plusieursButtons);

@@ -2,12 +2,12 @@ package fr.univlehavre.dpic.grancher;
 
 public class Affichage 
 {
-	private UsinePiles usine;
+	private Plateau plateau;
 	private Joueurs joueurs;
 	
-	public Affichage(UsinePiles usine, Joueurs joueurs)
+	public Affichage(Plateau plateau, Joueurs joueurs)
 	{
-		this.usine=usine;
+		this.plateau = plateau;
 		this.joueurs=joueurs;
 	}
 	
@@ -16,7 +16,7 @@ public class Affichage
 	{
 		StringBuilder builder = new StringBuilder();
 		
-		builder.append(usine);
+		builder.append(plateau);
 		builder.append("\nJoueur ");
 		builder.append(joueurs.getJoueurCourant());
 		builder.append("\nPile choisie : ");
@@ -41,7 +41,7 @@ public class Affichage
 	public String afficherPileFinale()
 	{
 		StringBuilder builder  = new StringBuilder();
-		PileButton pileFinale = usine.getPile(0);
+		PileButton pileFinale =plateau.getPile(0);
 		
 		builder.append("\nPile finale\n");
 		
@@ -73,7 +73,7 @@ public class Affichage
 		StringBuilder builder = new StringBuilder();
 		
 		builder.append("\nVeuillez entrer un nombre entre 1 et ");
-		builder.append(usine.tailleListe());
+		builder.append(plateau.tailleListe());
 		builder.append(" d'une pile qui contient un blanc : ");
 		
 		return builder.toString();
@@ -94,8 +94,8 @@ public class Affichage
 		return "\nVeuillez répondre par y ou n !";
 	}	
 	
-	protected UsinePiles getUsinePiles()
+	protected Plateau getPlateau()
 	{
-		return usine;
+		return plateau;
 	}
 }

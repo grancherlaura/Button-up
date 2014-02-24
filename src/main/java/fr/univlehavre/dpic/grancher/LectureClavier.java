@@ -5,14 +5,14 @@ import java.util.Scanner;
 public class LectureClavier 
 {
 	private Scanner scanner;
-	private UsinePiles usine;
+	private Plateau plateau;
 	private Affichage affich;
 	 
 	public LectureClavier(Affichage affich)
 	{
 		scanner = new Scanner(System.in);
 		this.affich = affich;
-		usine = affich.getUsinePiles();
+		plateau = affich.getPlateau();
 	}
 	
 	// retourne le numéro de pile choisi par le joueur
@@ -20,9 +20,10 @@ public class LectureClavier
 	{			
 		String chainePileChoisie = scanner.nextLine();
 		int indicePile = convertirEntier(chainePileChoisie);
+		VerifPile verif = plateau.getVerifUsine();
 		
 		// tant que la pile ne contient pas un pion blanc
-		while(usine.neContientPasEspion(indicePile))
+		while(verif.neContientPasEspion(indicePile))
 		{
 			System.err.println(affich.messageErreur());
 			chainePileChoisie = scanner.nextLine();

@@ -68,7 +68,7 @@ public class JoueursTest
 		
 		for(int i=0; i<8; i++)
 		{
-			j.getUsine().semerTouteLaPile(0);
+			j.getPlateau().semerTouteLaPile(0);
 		}
 		
 		String resultatAttendu = "ROUGE";

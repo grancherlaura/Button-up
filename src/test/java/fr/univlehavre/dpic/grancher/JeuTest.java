@@ -11,7 +11,7 @@ import static fr.univlehavre.dpic.grancher.PileButton.Button.*;
 public class JeuTest 
 {
 	Jeu j;
-	UsinePiles usine;
+	Plateau plateau;
 	Joueurs joueurs;
 	Affichage affich;
 	
@@ -19,10 +19,10 @@ public class JeuTest
 	public void setup()
 	{
 		j = new Jeu();
-		usine = j.getUsine();
+		plateau = j.getPlateau();
 		joueurs = j.getJoueurs();
 		affich = j.getAffich();
-		Collections.sort(usine.getListePiles());
+		Collections.sort(plateau.getListePiles());
 	}
 	
 	@Test
@@ -32,16 +32,16 @@ public class JeuTest
 		ArrayList<PileButton> listePile = new ArrayList<PileButton>();
 		listePile.add(pile);
 		
-		UsinePiles usine2 = new UsinePiles(listePile);
+		Plateau plateau2 = new Plateau(listePile);
 		Joueurs joueurs = new Joueurs();
-		Jeu j2 = new Jeu(usine2,joueurs, new Affichage(usine2, joueurs));
+		Jeu j2 = new Jeu(plateau2,joueurs, new Affichage(plateau2, joueurs));
 		
 		boolean resultat1 = j2.continuerManche();
 		assertFalse(resultat1);
 		
 		PileButton pile2 = new PileButton(NOIR);
 		listePile.add(pile2);
-		usine2 = new UsinePiles(listePile);
+		plateau2 = new Plateau(listePile);
 		
 		boolean resultat2 = j2.continuerManche();
 		assertTrue(resultat2);		
@@ -52,7 +52,7 @@ public class JeuTest
 	{		
 		for(int i=0; i<8; i++)
 		{
-			usine.semerTouteLaPile(0);
+			plateau.semerTouteLaPile(0);
 		}
 		
 		j.compterPoints();
@@ -104,14 +104,14 @@ public class JeuTest
 		assertEquals(reponseAttendue, reponseTrouvee);
 		assertEquals(reponseAttendue2, reponseTrouvee2);
 		
-		usine.semerTouteLaPile(2);
-		usine.semerTouteLaPile(2);
-		usine.semerTouteLaPile(1);
-		usine.semerTouteLaPile(1);
-		usine.semerTouteLaPile(0);
-		usine.semerTouteLaPile(2);
-		usine.semerTouteLaPile(0);
-		usine.semerTouteLaPile(1);
+		plateau.semerTouteLaPile(2);
+		plateau.semerTouteLaPile(2);
+		plateau.semerTouteLaPile(1);
+		plateau.semerTouteLaPile(1);
+		plateau.semerTouteLaPile(0);
+		plateau.semerTouteLaPile(2);
+		plateau.semerTouteLaPile(0);
+		plateau.semerTouteLaPile(1);
 		j.compterPoints();
 	
 		int reponseTrouvee3 = j.numeroPremierJoueur("n");
@@ -124,12 +124,12 @@ public class JeuTest
 	@Test
 	public void getUsineTest()
 	{
-		UsinePiles usAttendue = new UsinePiles();
+		Plateau usAttendue = new Plateau();
 		Joueurs joueurs = new Joueurs(5,8);
 		
 		Jeu jeu = new Jeu(usAttendue, joueurs, new Affichage(usAttendue, joueurs));
 		
-		UsinePiles usTrouvee = jeu.getUsine();
+		Plateau usTrouvee = jeu.getPlateau();
 		
 		assertEquals(usAttendue, usTrouvee);	
 	}
@@ -137,9 +137,9 @@ public class JeuTest
 	@Test
 	public void getAffichTest()
 	{
-		Affichage affichAttendue = new Affichage(usine,joueurs);
+		Affichage affichAttendue = new Affichage(plateau,joueurs);
 		
-		Jeu j2 = new Jeu(new UsinePiles(), new Joueurs(0,0), affichAttendue);
+		Jeu j2 = new Jeu(new Plateau(), new Joueurs(0,0), affichAttendue);
 		
 		Affichage affichTrouvee = j2.getAffich();
 		
@@ -151,7 +151,7 @@ public class JeuTest
 	{
 		Joueurs joueursAttendus = new Joueurs(5, 4);
 		
-		Jeu j2 = new Jeu(usine, joueursAttendus, affich);
+		Jeu j2 = new Jeu(plateau, joueursAttendus, affich);
 		
 		Joueurs joueursTrouves = j2.getJoueurs();
 		
